@@ -46,10 +46,17 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         $tbl_build_detail->char_middleware_version = $build_details->Middleware_version;
         /*if (!$tbl_build_detail->save()) {
             foreach ($tbl_build_detail->getMessages() as $message) {
-                $this->flash->error($message);
+                print_r($message);
             }
         }*/
+
         $tbl_job_queue->uint_build_index = $tbl_build_detail->getWriteConnection()->lastInsertId();;
+        /*if (!$tbl_job_queue-->save()) {
+            foreach ($tbl_job_queue-->getMessages() as $message) {
+                print_r($message);
+            }
+        }*/
+        
 
         $tests_details=$jsonJob->tests_details;
         foreach ($tests_details as $test) 
