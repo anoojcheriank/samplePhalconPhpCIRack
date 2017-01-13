@@ -1,0 +1,63 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="page-header">
+    <h1>
+        Search tbl_test
+    </h1>
+    <p>
+        <?php echo $this->tag->linkTo(["tbl_test/new", "Create tbl_test"]) ?>
+    </p>
+</div>
+
+<?php echo $this->getContent() ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "tbl_test/search",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldUintTestIndex" class="col-sm-2 control-label">Uint Of Test Of Index</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_index", "type" => "number", "class" => "form-control", "id" => "fieldUintTestIndex"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintTestType" class="col-sm-2 control-label">Uint Of Test Of Type</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_type", "type" => "number", "class" => "form-control", "id" => "fieldUintTestType"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintTestMode" class="col-sm-2 control-label">Uint Of Test Of Mode</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_mode", "type" => "number", "class" => "form-control", "id" => "fieldUintTestMode"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldTextTestDescription" class="col-sm-2 control-label">Text Of Test Of Description</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textArea(["text_test_description", "cols" => 30, "rows" => 4, "class" => "form-control", "id" => "fieldTextTestDescription"]) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Search", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>

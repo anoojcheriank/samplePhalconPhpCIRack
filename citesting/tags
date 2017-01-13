@@ -1,0 +1,133 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CardNumber	app/models/Stbinfo.php	/^    public $CardNumber;$/;"	v
+Cidt	app/models/Cidt.php	/^class Cidt extends Model$/;"	c
+CidtController	app/controllers/CidtController.php	/^class CidtController extends \\Phalcon\\Mvc\\Controller$/;"	c
+Cift	app/models/Cift.php	/^class Cift extends \\Phalcon\\Mvc\\Model$/;"	c
+CiftController	app/controllers/CiftController.php	/^class CiftController extends \\Phalcon\\Mvc\\Controller$/;"	c
+ComPort	app/models/Stbinfo.php	/^    public $ComPort;$/;"	v
+ControllerBase	app/controllers/ControllerBase.php	/^class ControllerBase extends Controller$/;"	c
+Dmsresult	app/models/Dmsresult.php	/^class Dmsresult extends Model$/;"	c
+Dmsstbstatus	app/models/Dmsstbstatus.php	/^class Dmsstbstatus extends Model$/;"	c
+ErrorMessage	app/models/Dmsresult.php	/^    public $ErrorMessage;$/;"	v
+IP	app/models/Stbinfo.php	/^    public $IP;$/;"	v
+IndexController	app/controllers/IndexController.php	/^class IndexController extends Controller$/;"	c
+IsAvailable	app/models/Dmsstbstatus.php	/^    public $IsAvailable;$/;"	v
+JobId	app/models/Cidt.php	/^    public $JobId;$/;"	v
+JobId	app/models/Cift.php	/^    public $JobId;$/;"	v
+JobId	app/models/Dmsresult.php	/^    public $JobId;$/;"	v
+JobName	app/models/Cidt.php	/^    public $JobName;$/;"	v
+JobName	app/models/Stbinfo.php	/^    public $JobName;$/;"	v
+JobNumber	app/models/Cidt.php	/^    public $JobNumber;$/;"	v
+JobNumber	app/models/Cift.php	/^    public $JobNumber;$/;"	v
+MAC	app/models/Stbinfo.php	/^    public $MAC;$/;"	v
+Percentage	app/models/Dmsresult.php	/^    public $Percentage;$/;"	v
+Platform	app/models/Cidt.php	/^    public $Platform;$/;"	v
+Platform	app/models/Cift.php	/^    public $Platform;$/;"	v
+Platform	app/models/Dmsresult.php	/^    public $Platform;$/;"	v
+Platform	app/models/Dmsstbstatus.php	/^    public $Platform;$/;"	v
+Platform	app/models/Stbinfo.php	/^    public $Platform;$/;"	v
+Priority	app/models/Cidt.php	/^    public $Priority;$/;"	v
+Priority	app/models/Cift.php	/^    public $Priority;$/;"	v
+Priority	index.php	/^                    $Priority = $default_priority;$/;"	v
+Priority	index.php	/^                    $Priority = $test->Priority;$/;"	v
+Priority	index.php	/^                $Priority = $default_priority;$/;"	v
+ROOT_PATH	index.php	/^define("ROOT_PATH", "\/var\/www\/html\/cisystem\/citesting");$/;"	d
+RackName	app/models/Stbinfo.php	/^    public $RackName;$/;"	v
+STBID	app/models/Stbinfo.php	/^    public $STBID;$/;"	v
+STBName	app/models/Dmsresult.php	/^    public $STBName;$/;"	v
+STBName	app/models/Dmsstbstatus.php	/^    public $STBName;$/;"	v
+STBName	app/models/Stbinfo.php	/^    public $STBName;$/;"	v
+SlotNumber	app/models/Stbinfo.php	/^    public $SlotNumber;$/;"	v
+Status	app/models/Cidt.php	/^    public $Status;$/;"	v
+Status	app/models/Cift.php	/^    public $Status;$/;"	v
+Status	app/models/Dmsresult.php	/^    public $Status;$/;"	v
+Stbinfo	app/models/Stbinfo.php	/^class Stbinfo extends Model$/;"	c
+TestListName	app/models/Cift.php	/^    public $TestListName;$/;"	v
+app	index.php	/^    $app = new Micro($di);$/;"	v
+application	index.php	/^$application = new Application($di);$/;"	v
+ch	index.php	/^                        $ch = curl_init();$/;"	v
+cidt_get_test	index.php	/^                $cidt_get_test = "SELECT * FROM citesting\\\\Cidt WHERE Platform = :Platform: and Status = :Status: ORDER BY Priority LIMIT 1";$/;"	v
+cidt_get_test_param	index.php	/^                    $cidt_get_test_param = "SELECT * FROM citesting\\\\Stbinfo WHERE STBName = :STBName: LIMIT 1";$/;"	v
+cidt_getalldata	cidt_api.php	/^function cidt_getalldata() use ($app){$/;"	f
+cidt_getstatus	cidt_api.php	/^function cidt_getstatus($JobId, $app){$/;"	f
+cidt_parameter_list	index.php	/^                    $cidt_parameter_list = $app->modelsManager->executeQuery($cidt_get_test_param, [$/;"	v
+cidt_test	index.php	/^                $cidt_test = $app->modelsManager->executeQuery($cidt_get_test, [$/;"	v
+cidt_tests	cidt_api.php	/^    $cidt_tests = $app->modelsManager->executeQuery($phql);$/;"	v
+cidt_tests	index.php	/^            $cidt_tests = $app->modelsManager->executeQuery($/;"	v
+cidt_tests	index.php	/^            $cidt_tests = $app->modelsManager->executeQuery($phql);$/;"	v
+class	app/config/services.php	/^    $class = 'Phalcon\\Db\\Adapter\\Pdo\\\\' . $config->database->adapter;$/;"	v
+config	app/config/services.php	/^            $config = $this->getConfig();$/;"	v
+config	app/config/services.php	/^    $config = $this->getConfig();$/;"	v
+connection	app/config/services.php	/^    $connection = new $class($params);$/;"	v
+data	cidt_api.php	/^    $data = [];$/;"	v
+data	index.php	/^                        $data = "Jobid=" . $test->JobId . "&Platform=" . $test->Platform . "&STBName=" . $cidt_parameter->STBName .$/;"	v
+data	index.php	/^            $data = [];$/;"	v
+default_job_number	index.php	/^                $default_job_number = 10;$/;"	v
+default_priority	index.php	/^                $default_priority = 10;$/;"	v
+default_test_name	index.php	/^                $default_test_name = "CISystem_DMS_Test";$/;"	v
+di	index.php	/^$di = new FactoryDefault();$/;"	v
+dms_stb_available	index.php	/^            $dms_stb_available = $app->modelsManager->executeQuery($phql, [$/;"	v
+errors	index.php	/^                            $errors = [];$/;"	v
+errors	index.php	/^                    $errors = [];$/;"	v
+find	app/models/Cidt.php	/^    public static function find($parameters = null)$/;"	f
+find	app/models/Cift.php	/^    public static function find($parameters = null)$/;"	f
+find	app/models/Dmsresult.php	/^    public static function find($parameters = null)$/;"	f
+find	app/models/Dmsstbstatus.php	/^    public static function find($parameters = null)$/;"	f
+find	app/models/Stbinfo.php	/^    public static function find($parameters = null)$/;"	f
+findFirst	app/models/Cidt.php	/^    public static function findFirst($parameters = null)$/;"	f
+findFirst	app/models/Cift.php	/^    public static function findFirst($parameters = null)$/;"	f
+findFirst	app/models/Dmsresult.php	/^    public static function findFirst($parameters = null)$/;"	f
+findFirst	app/models/Dmsstbstatus.php	/^    public static function findFirst($parameters = null)$/;"	f
+findFirst	app/models/Stbinfo.php	/^    public static function findFirst($parameters = null)$/;"	f
+getSource	app/models/Cidt.php	/^    public function getSource()$/;"	f
+getSource	app/models/Cift.php	/^    public function getSource()$/;"	f
+getSource	app/models/Dmsresult.php	/^    public function getSource()$/;"	f
+getSource	app/models/Dmsstbstatus.php	/^    public function getSource()$/;"	f
+getSource	app/models/Stbinfo.php	/^    public function getSource()$/;"	f
+indexAction	app/controllers/CidtController.php	/^    public function indexAction()$/;"	f
+indexAction	app/controllers/CiftController.php	/^    public function indexAction()$/;"	f
+indexAction	app/controllers/IndexController.php	/^    public function indexAction()$/;"	f
+init_status	index.php	/^                $init_status = "WAITING";$/;"	v
+initialize	app/models/Cidt.php	/^    public function initialize()$/;"	f
+initialize	app/models/Cift.php	/^    public function initialize()$/;"	f
+initialize	app/models/Dmsresult.php	/^    public function initialize()$/;"	f
+initialize	app/models/Dmsstbstatus.php	/^    public function initialize()$/;"	f
+initialize	app/models/Stbinfo.php	/^    public function initialize()$/;"	f
+jenkins	index.php	/^                        $jenkins = new Jenkins($loc_config->host->JenkinsRootUrl);$/;"	v
+loader	app/config/loader.php	/^$loader = new \\Phalcon\\Loader();$/;"	v
+loader	index.php	/^$loader = new Loader();$/;"	v
+loc_config	index.php	/^                $loc_config = new ConfigIni(ROOT_PATH ."\/app\/config\/"."config.ini");$/;"	v
+loc_config	index.php	/^            $loc_config = new ConfigIni(ROOT_PATH ."\/app\/config\/"."config.ini");$/;"	v
+loc_config	index.php	/^        $loc_config = new ConfigIni(ROOT_PATH ."\/app\/config\/"."config.ini");$/;"	v
+output	index.php	/^                        $output = curl_exec($ch);$/;"	v
+params	app/config/services.php	/^    $params = [$/;"	v
+phql	cidt_api.php	/^    $phql = "SELECT * FROM citesting\\\\Cidt ORDER BY Priority";$/;"	v
+phql	index.php	/^                        $phql = "UPDATE citesting\\\\Dmsstbstatus SET IsAvailable = :availability: WHERE STBName = :STBName:";$/;"	v
+phql	index.php	/^                $phql = "INSERT INTO citesting\\\\Cidt  " .$/;"	v
+phql	index.php	/^            $phql = "SELECT * FROM citesting\\\\Cidt ORDER BY Priority";$/;"	v
+phql	index.php	/^            $phql = "SELECT * FROM citesting\\\\Dmsresult WHERE JobId = :JobId:";$/;"	v
+phql	index.php	/^            $phql = "SELECT * FROM citesting\\\\Dmsstbstatus WHERE IsAvailable = :availability:";$/;"	v
+response	index.php	/^                        $response = new Response();$/;"	v
+response	index.php	/^                $response = new Response();$/;"	v
+response	index.php	/^    $response = $application->handle();$/;"	v
+session	app/config/services.php	/^    $session = new SessionAdapter();$/;"	v
+status	index.php	/^                        $status = $app->modelsManager->executeQuery($phql, [$/;"	v
+status	index.php	/^                $status = $app->modelsManager->executeQuery($phql,$/;"	v
+test	index.php	/^                $test = $app->request->getJsonRawBody();$/;"	v
+url	app/config/services.php	/^    $url = new UrlResolver();$/;"	v
+url	index.php	/^                        $url = $url_link.$data;$/;"	v
+url	index.php	/^        $url = new UrlProvider();$/;"	v
+url_link	index.php	/^                        $url_link = $loc_config->host->JenkinsRootUrl . "job\/" . $cidt_parameter->JobName . "\/build?";$/;"	v
+validation	app/models/Cidt.php	/^    public function validation()$/;"	f
+validation	app/models/Cift.php	/^    public function validation()$/;"	f
+validation	app/models/Dmsresult.php	/^    public function validation()$/;"	f
+validation	app/models/Dmsstbstatus.php	/^    public function validation()$/;"	f
+validation	app/models/Stbinfo.php	/^    public function validation()$/;"	f
+view	app/config/services.php	/^    $view = new View();$/;"	v
+view	index.php	/^        $view = new View();$/;"	v
+volt	app/config/services.php	/^            $volt = new VoltEngine($view, $this);$/;"	v

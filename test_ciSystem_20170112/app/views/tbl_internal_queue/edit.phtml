@@ -1,0 +1,105 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag->linkTo(["tbl_internal_queue", "Back"]) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Edit tbl_internal_queue
+    </h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "tbl_internal_queue/save",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldUintJobId" class="col-sm-2 control-label">Uint Of Job</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_job_id", "type" => "number", "class" => "form-control", "id" => "fieldUintJobId"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintSeqOrder" class="col-sm-2 control-label">Uint Of Seq Of Order</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_seq_order", "type" => "number", "class" => "form-control", "id" => "fieldUintSeqOrder"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintTestIndex" class="col-sm-2 control-label">Uint Of Test Of Index</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_index", "type" => "number", "class" => "form-control", "id" => "fieldUintTestIndex"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintSlotIndex" class="col-sm-2 control-label">Uint Of Slot Of Index</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_slot_index", "type" => "number", "class" => "form-control", "id" => "fieldUintSlotIndex"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDatetimeTestStart" class="col-sm-2 control-label">Datetime Of Test Of Start</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["datetime_test_start", "size" => 30, "class" => "form-control", "id" => "fieldDatetimeTestStart"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDatetimeTestFinish" class="col-sm-2 control-label">Datetime Of Test Of Finish</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["datetime_test_finish", "size" => 30, "class" => "form-control", "id" => "fieldDatetimeTestFinish"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintTestStatus" class="col-sm-2 control-label">Uint Of Test Of Status</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_status", "type" => "number", "class" => "form-control", "id" => "fieldUintTestStatus"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintTestCheckJobType" class="col-sm-2 control-label">Uint Of Test Of Check Of Job Of Type</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_check_job_type", "type" => "number", "class" => "form-control", "id" => "fieldUintTestCheckJobType"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldTimeTestWait" class="col-sm-2 control-label">Time Of Test Of Wait</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["time_test_wait", "size" => 30, "class" => "form-control", "id" => "fieldTimeTestWait"]) ?>
+    </div>
+</div>
+
+
+<?php echo $this->tag->hiddenField("id") ?>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Save", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>

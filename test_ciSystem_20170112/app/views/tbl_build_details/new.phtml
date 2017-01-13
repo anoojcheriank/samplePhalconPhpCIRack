@@ -1,0 +1,75 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag->linkTo(["tbl_build_details", "Go Back"]) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Create tbl_build_details
+    </h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "tbl_build_details/create",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldCharBuildName" class="col-sm-2 control-label">Char Of Build Of Name</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["char_build_name", "size" => 30, "class" => "form-control", "id" => "fieldCharBuildName"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintBoxPlatform" class="col-sm-2 control-label">Uint Of Box Of Platform</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_box_platform", "type" => "number", "class" => "form-control", "id" => "fieldUintBoxPlatform"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCharBuildMd5sum" class="col-sm-2 control-label">Char Of Build Of Md5sum</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["char_build_md5sum", "size" => 30, "class" => "form-control", "id" => "fieldCharBuildMd5sum"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintBuildType" class="col-sm-2 control-label">Uint Of Build Of Type</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_build_type", "type" => "number", "class" => "form-control", "id" => "fieldUintBuildType"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCharMiddlewareVersion" class="col-sm-2 control-label">Char Of Middleware Of Version</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["char_middleware_version", "size" => 30, "class" => "form-control", "id" => "fieldCharMiddlewareVersion"]) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Save", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>

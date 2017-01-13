@@ -1,0 +1,35 @@
+{
+        "__job" : {
+                "job_id" : 1,
+                "priority" : 1,
+                "number_of_boxes" : 1,             
+                "build_details" : {
+                        "build_name" : "xwing412-NGDEV-69180_ThreadPriority_HQ004-01.08.00-sky_trials",
+                        "build_platform" : "xwing",
+                        "build_type" : "nds_si_devel",
+                        "Middleware_version" : "Q004-01.08.00" 
+                },
+                "tests_details" : [
+                {
+                                "name" : "bbr-3X25-programs.py",
+                                "type" : "pythonCdiProc",
+                                "monitoring_tasks" : [
+                                {
+                                    "name" : "blue_screen_check.py",
+                                    "type" : "stormIR"
+                                },
+                                {
+                                    "name" : "abort_timeout",
+                                    "type" : "timeBased",
+                                    "timeout_in_minutes" : 500
+                                },
+                                {
+                                    "name" : "pink_screen_check.py",
+                                    "type" : "stormIR"
+                                }
+                        ]
+                }
+                ]
+
+        }
+}
