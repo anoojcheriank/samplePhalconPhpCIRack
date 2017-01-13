@@ -1,0 +1,4 @@
+https://docs.phalconphp.com/en/latest/reference/tutorial-rest.html
+http://www.w3schools.com/php/default.asp
+http://www.w3schools.com/php/showphp.asp?filename=demo_intro
+http://hydra.bskyb.com/phpmyadmin/index.php
