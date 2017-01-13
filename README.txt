@@ -12,3 +12,14 @@ git push -u origin master
 commit modifirf files
 ---------------------
 git commit -m "git commnds added" ./README.txt
+
+
+save table with foreign key
+---------------------------
+http://stackoverflow.com/questions/32741402/how-to-get-last-insert-id-with-phalcon
+$yourModel = new YourModel();
+$yourModel->save() // Or create();
+$newId = $yourModel->getWriteConnection()->lastInsertId();
+
+http://stackoverflow.com/questions/4775520/mysql-how-to-insert-values-in-a-table-which-has-a-foreign-key
+
