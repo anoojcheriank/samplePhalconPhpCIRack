@@ -11,9 +11,9 @@
                 },
                 "tests_details" : [
                 {
-                                "name" : "bbr-3X25-programs.py",
-                                "type" : "pythonCdiProc",
-                                "monitoring_tasks" : [
+                       "name" : "bbr-3X25-programs.py",
+                       "type" : "pythonCdiProc",
+                       "monitoring_tasks" : [
                                 {
                                     "name" : "blue_screen_check.py",
                                     "type" : "stormIR"
