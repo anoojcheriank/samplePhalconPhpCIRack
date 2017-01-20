@@ -25,6 +25,7 @@ TblTest	app/models/TblTest.php	/^class TblTest extends \\Phalcon\\Mvc\\Model$/;"
 TblTestController	app/controllers/TblTestController.php	/^class TblTestController extends ControllerBase$/;"	c
 app	public/index.php	/^    $app = new Phalcon\\Mvc\\Micro($di);$/;"	v
 bool_slot_availability	app/models/TblSlotConfig.php	/^    public $bool_slot_availability;$/;"	v
+build_details	app/controllers/CiRackTestingReqHandlerController.php	/^        $build_details=$jsonJob->build_details;$/;"	v
 char_box_ip	app/models/TblBoxDetails.php	/^    public $char_box_ip;$/;"	v
 char_build_md5sum	app/models/TblBuildDetails.php	/^    public $char_build_md5sum;$/;"	v
 char_build_name	app/models/TblBuildDetails.php	/^    public $char_build_name;$/;"	v
@@ -99,8 +100,10 @@ initialize	app/models/TblJobQueue.php	/^    public function initialize()$/;"	f
 initialize	app/models/TblMonitoringTaskSeqOfTest.php	/^    public function initialize()$/;"	f
 initialize	app/models/TblSlotConfig.php	/^    public function initialize()$/;"	f
 initialize	app/models/TblTest.php	/^    public function initialize()$/;"	f
+jsonJob	app/controllers/CiRackTestingReqHandlerController.php	/^        $jsonJob=$jsonArg->__job;$/;"	v
 jsonJob	public/index.php	/^              $jsonJob = $app->request->getJsonRawBody();$/;"	v
 loader	app/config/loader.php	/^$loader = new \\Phalcon\\Loader();$/;"	v
+monitoring_tasks	app/controllers/CiRackTestingReqHandlerController.php	/^            $monitoring_tasks=$test->monitoring_tasks;$/;"	v
 newAction	app/controllers/TblBoxDetailsController.php	/^    public function newAction()$/;"	f
 newAction	app/controllers/TblBuildDetailsController.php	/^    public function newAction()$/;"	f
 newAction	app/controllers/TblInternalQueueController.php	/^    public function newAction()$/;"	f
@@ -160,7 +163,7 @@ saveAction	app/controllers/TblJobQueueController.php	/^    public function saveA
 saveAction	app/controllers/TblMonitoringTaskSeqOfTestController.php	/^    public function saveAction()$/;"	f
 saveAction	app/controllers/TblSlotConfigController.php	/^    public function saveAction()$/;"	f
 saveAction	app/controllers/TblTestController.php	/^    public function saveAction()$/;"	f
-scheduleJob	app/controllers/CiRackTestingReqHandlerController.php	/^    public function scheduleJob($jsonJob)$/;"	f
+scheduleJob	app/controllers/CiRackTestingReqHandlerController.php	/^    public function scheduleJob($jsonArg)$/;"	f
 searchAction	app/controllers/TblBoxDetailsController.php	/^    public function searchAction()$/;"	f
 searchAction	app/controllers/TblBuildDetailsController.php	/^    public function searchAction()$/;"	f
 searchAction	app/controllers/TblInternalQueueController.php	/^    public function searchAction()$/;"	f
@@ -198,6 +201,7 @@ tbl_test	app/controllers/TblTestController.php	/^            $tbl_test = TblTest
 tbl_test	app/controllers/TblTestController.php	/^        $tbl_test = TblTest::find($parameters);$/;"	v
 tbl_test	app/controllers/TblTestController.php	/^        $tbl_test = TblTest::findFirstByuint_test_index($uint_test_index);$/;"	v
 tbl_test	app/controllers/TblTestController.php	/^        $tbl_test = new TblTest();$/;"	v
+tests_details	app/controllers/CiRackTestingReqHandlerController.php	/^        $tests_details=$jsonJob->tests_details;$/;"	v
 text_monitor_test_description	app/models/TblMonitoringTaskSeqOfTest.php	/^    public $text_monitor_test_description;$/;"	v
 text_test_description	app/models/TblTest.php	/^    public $text_test_description;$/;"	v
 time_monitor_test_wait	app/models/TblMonitoringTaskSeqOfTest.php	/^    public $time_monitor_test_wait;$/;"	v

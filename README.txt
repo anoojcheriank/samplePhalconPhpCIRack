@@ -23,3 +23,6 @@ $newId = $yourModel->getWriteConnection()->lastInsertId();
 
 http://stackoverflow.com/questions/4775520/mysql-how-to-insert-values-in-a-table-which-has-a-foreign-key
 
+http://stackoverflow.com/questions/24311249/how-to-find-by-multiple-criteria-with-phalcon-findfirst
+
+
