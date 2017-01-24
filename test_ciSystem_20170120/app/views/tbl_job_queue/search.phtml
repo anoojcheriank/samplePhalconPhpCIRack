@@ -1,0 +1,71 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<?php use Phalcon\Tag; ?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag->linkTo(["tbl_job_queue/index", "Go Back"]); ?></li>
+            <li class="next"><?php echo $this->tag->linkTo(["tbl_job_queue/new", "Create "]); ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>Search result</h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Uint Of Job</th>
+            <th>Uint Of Priority</th>
+            <th>Uint Of Number Of Of Of Boxes</th>
+            <th>Uint Of Build Of Index</th>
+            <th>Uint Of Job Of Status</th>
+
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $tbl_job_queue): ?>
+            <tr>
+                <td><?php echo $tbl_job_queue->uint_job_id ?></td>
+            <td><?php echo $tbl_job_queue->uint_priority ?></td>
+            <td><?php echo $tbl_job_queue->uint_number_of_boxes ?></td>
+            <td><?php echo $tbl_job_queue->uint_build_index ?></td>
+            <td><?php echo $tbl_job_queue->uint_job_status ?></td>
+
+                <td><?php echo $this->tag->linkTo(["tbl_job_queue/edit/" . $tbl_job_queue->uint_job_id, "Edit"]); ?></td>
+                <td><?php echo $this->tag->linkTo(["tbl_job_queue/delete/" . $tbl_job_queue->uint_job_id, "Delete"]); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?php echo $page->current, "/", $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <nav>
+            <ul class="pagination">
+                <li><?php echo $this->tag->linkTo("tbl_job_queue/search", "First") ?></li>
+                <li><?php echo $this->tag->linkTo("tbl_job_queue/search?page=" . $page->before, "Previous") ?></li>
+                <li><?php echo $this->tag->linkTo("tbl_job_queue/search?page=" . $page->next, "Next") ?></li>
+                <li><?php echo $this->tag->linkTo("tbl_job_queue/search?page=" . $page->last, "Last") ?></li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag->linkTo(["tbl_job_queue", "Go Back"]) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Create tbl_job_queue
+    </h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "tbl_job_queue/create",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldUintJobId" class="col-sm-2 control-label">Uint Of Job</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_job_id", "type" => "number", "class" => "form-control", "id" => "fieldUintJobId"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintPriority" class="col-sm-2 control-label">Uint Of Priority</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_priority", "type" => "number", "class" => "form-control", "id" => "fieldUintPriority"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintNumberOfBoxes" class="col-sm-2 control-label">Uint Of Number Of Of Of Boxes</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_number_of_boxes", "type" => "number", "class" => "form-control", "id" => "fieldUintNumberOfBoxes"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintBuildIndex" class="col-sm-2 control-label">Uint Of Build Of Index</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_build_index", "type" => "number", "class" => "form-control", "id" => "fieldUintBuildIndex"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintJobStatus" class="col-sm-2 control-label">Uint Of Job Of Status</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_job_status", "type" => "number", "class" => "form-control", "id" => "fieldUintJobStatus"]) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Save", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>

@@ -1,0 +1,70 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag->linkTo(["tbl_test", "Back"]) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Edit tbl_test
+    </h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "tbl_test/save",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldUintTestType" class="col-sm-2 control-label">Uint Of Test Of Type</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_type", "type" => "number", "class" => "form-control", "id" => "fieldUintTestType"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintTestMode" class="col-sm-2 control-label">Uint Of Test Of Mode</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_test_mode", "type" => "number", "class" => "form-control", "id" => "fieldUintTestMode"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldTextTestDescription" class="col-sm-2 control-label">Text Of Test Of Description</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textArea(["text_test_description", "cols" => 30, "rows" => 4, "class" => "form-control", "id" => "fieldTextTestDescription"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCharTestName" class="col-sm-2 control-label">Char Of Test Of Name</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["char_test_name", "size" => 30, "class" => "form-control", "id" => "fieldCharTestName"]) ?>
+    </div>
+</div>
+
+
+<?php echo $this->tag->hiddenField("id") ?>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Save", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>
