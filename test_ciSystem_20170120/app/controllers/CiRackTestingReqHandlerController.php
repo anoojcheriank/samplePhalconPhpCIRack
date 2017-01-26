@@ -28,7 +28,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Checks if shared json Job is valid
      */
-    public function checkJobDataValidity($jsonJob)
+    private function checkJobDataValidity($jsonJob)
     {
        if (!isset($jsonJob->job_id))
        {
@@ -82,22 +82,57 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                 return -1;
            }
 
+           $tbl_test = TblTest::findFirst(
+                [
+                    'columns'    => '*',
+                    'conditions' => "char_test_name = ?1 AND uint_test_type = ?2",
+                    'bind'       => [
+                        1 => $test->name,
+                        2 => $test->type,
+                    ]
+                ]
+            );
+
+            if (!is_object($tbl_test))
+            {
+                echo "Test not found with name: $test->name and type: $test->type \n";
+                return -1;
+            }
+
             if (isset($test->monitoring_tasks))
             {
                 $monitorTestCount = 1;
                 $monitoring_tasks=$test->monitoring_tasks;
                 foreach ($monitoring_tasks as $monitoring_task) 
                 {
-                   if (!isset($monitoring_task->name))
-                   {
+                    if (!isset($monitoring_task->name))
+                    {
                         echo "monitoring_task->name not set";
                         return -1;
-                   }
-                   if (!isset($monitoring_task->type))
-                   {
+                    }
+                    if (!isset($monitoring_task->type))
+                    {
                         echo "monitoring_task->type not set";
                         return -1;
-                   }
+                    }
+                    $tbl_monitor_test = TblTest::findFirst(
+                        [
+                            'columns'    => '*',
+                            'conditions' => "char_test_name = ?1 AND uint_test_type = ?2",
+                            'bind'       => [
+                                1 => $monitoring_task->name,
+                                2 => $monitoring_task->type,
+                            ]
+                        ]
+                    );
+
+                    if (!is_object($tbl_monitor_test))
+                    {
+                        echo "Test not found with name: $monitoring_task->name and type: $monitoring_task->type \n";
+                        return -1;
+                    }
+
+
                 }
             }
         }
@@ -266,5 +301,96 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         }
 
     }
+
+    /*
+     * Process individal jobs in job queue
+     */
+    private function processJob($tbl_job)
+    {
+
+        $time_out_in_mins = 3* 24 * 60; /*Two days run by default if not specified else*/        
+        
+        $tbl_internal_test_queue = TblInternalQueue::find(
+            [
+                'columns'    => '*',
+                "order" => "uint_seq_order",
+                'conditions' => "uint_job_id = ?1",
+                'bind'       => [
+                        1 => $tbl_job->uint_job_id,
+                    ]
+            ]
+        );
+
+        if (!is_object($tbl_internal_test_queue))
+        {
+            echo "Not able to find tests for the Job with Job id: $tbl_job->uint_job_id \n";
+            return -1;
+        }
+
+        
+        foreach ($tbl_internal_test_queue as $tbl_internal_test_details) 
+        {
+            /*
+             * Find test link to the Queue and fire it
+             */
+            $tbl_test = TblTest::findFirst(
+                [
+                    'columns'    => '*',
+                    'conditions' => "uint_test_index = ?1",
+                    'bind'       => [
+                        1 => $tbl_internal_test_details->uint_test_index
+                    ]
+                ]
+            );
+
+            if (is_object($tbl_test))
+            {
+                echo "test->name: $tbl_test->char_test_name \n";
+                echo "test->type: $tbl_test->uint_test_type \n";
+                /*
+                 * Fire actual tests here
+                 */
+            }
+
+            /*
+             * find monitoring tests link to the Queue and fire it.
+             */
+
+        }
+    }
+  
+
+   /*
+     * Process Job queue based on priority
+     */
+    public function processJobQueue()
+    {
+        /*
+         * Find Job by priority
+         */
+        $tbl_job_queue = TblJobQueue::find(
+            [
+                'columns'    => '*',
+                "order" => "uint_priority ASC"
+            ]
+        );
+
+        if (!is_object($tbl_job_queue))
+        {
+            echo "Job queue is empty \n";
+            return -1;
+        }
+
+        
+        foreach ($tbl_job_queue as $tbl_job) 
+        {
+            echo "job_id: $tbl_job->uint_job_id \n";
+            echo "priority: $tbl_job->uint_priority \n";
+            echo "number_of_boxes: $tbl_job->uint_number_of_boxes \n";
+            $this->processJob($tbl_job);
+            //$tbl_job_queue->uint_job_status = "SCHEDULED"; /*Need to add with enum*/
+        }
+    }
+
 }
 

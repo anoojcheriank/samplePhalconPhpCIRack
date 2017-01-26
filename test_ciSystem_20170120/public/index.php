@@ -88,6 +88,27 @@ try {
 
         }
     );
+
+    /**
+     * processJob webservice
+     */
+    $app->post(
+        "/ciRack/processJobQueue",
+        function () use ($app){
+            try {
+              $jsonJob = $app->request->getJsonRawBody();
+
+              $ciRackHandle = new CiRackTestingReqHandlerController();
+              //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
+              $ciRackHandle->processJobQueue();
+
+            }catch (Exception $e) {
+                echo 'Caught exception: '.  $e->getMessage(). "\n";
+            }
+
+        }
+    );
+ 
     
    /*
     * Start web service
