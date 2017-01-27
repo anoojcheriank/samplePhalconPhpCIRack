@@ -38,7 +38,7 @@ class TblMonitoringTaskSeqOfTest extends \Phalcon\Mvc\Model
      * @var string
      * @Column(type="string", nullable=true)
      */
-    public $time_monitor_test_wait;
+    public $uint_monitor_test_wait;
 
     /**
      *

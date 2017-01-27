@@ -48,7 +48,7 @@ CREATE TABLE tbl_monitoring_task_seq_of_test
   uint_internalQ_mapping_index integer unsigned NOT NULL DEFAULT 1,
   uint_monitor_task_seq_order integer unsigned NOT NULL DEFAULT 1,
   uint_monitor_test_index integer unsigned NOT NULL DEFAULT 1,
-  time_monitor_test_wait time,
+  uint_monitor_test_wait integer unsigned,
   datetime_monitor_test_start datetime,
   datetime_monitor_test_finish datetime,
   uint_monitor_test_status integer unsigned NOT NULL,

@@ -138,7 +138,6 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         }
         return 0;
     }
- 
 
     public function scheduleJob($jsonArg)
     {
@@ -267,12 +266,16 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                 {
                     echo "monitoring_task[name]: $monitoring_task->name \n";
                     echo "monitoring_task[type]: $monitoring_task->type \n";
-                    if (isset($monitoring_task->timeout_in_minutes))
-                        echo "monitoring_task[timeout_in_minutes]: $monitoring_task->timeout_in_minutes \n";
                     $tbl_monitoring_task_seq_of_test = new TblMonitoringTaskSeqOfTest();
                     $tbl_monitoring_task_seq_of_test->uint_internalQ_mapping_index = $tbl_internal_queue->uint_internalQ_mapping_index;
                     $tbl_monitoring_task_seq_of_test->uint_monitor_task_seq_order = $monitorTestCount;
                     $tbl_monitoring_task_seq_of_test->uint_monitor_test_status = 1; /*Need to add with enum*/
+                    if (isset($monitoring_task->timeout_in_minutes)) 
+                    {
+                        echo "monitoring_task[timeout_in_minutes]: $monitoring_task->timeout_in_minutes \n";
+                        $tbl_monitoring_task_seq_of_test->uint_monitor_test_wait = $monitoring_task->timeout_in_minutes; /*Change this time to uint*/
+                    }
+
                     $tbl_monitor_test = TblTest::findFirst(
                         [
                             'columns'    => '*',
@@ -305,11 +308,67 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Process individal jobs in job queue
      */
-    private function processJob($tbl_job)
+    private function processMonTasks($tbl_internal_test_details)
     {
 
         $time_out_in_mins = 3* 24 * 60; /*Two days run by default if not specified else*/        
         
+        $tbl_monitoring_task_queue = TblMonitoringTaskSeqOfTest::find(
+            [
+                'columns'    => '*',
+                "order" => "uint_monitor_task_seq_order",
+                'conditions' => "uint_internalQ_mapping_index = ?1",
+                'bind'       => [
+                        1 => $tbl_internal_test_details->uint_internalQ_mapping_index,
+                    ]
+            ]
+        );
+
+        if (!is_object($tbl_monitoring_task_queue))
+        {
+            echo "No monitoring tasks for mapping index $tbl_internal_test_details->uint_internalQ_mapping_index";
+            return -1;
+        }
+
+        
+        foreach ($tbl_monitoring_task_queue as $tbl_monitoring_task_details) 
+        {
+            /*
+             * Find test link to the Queue and fire it
+             */
+            $tbl_test = TblTest::findFirst(
+                [
+                    'columns'    => '*',
+                    'conditions' => "uint_test_index = ?1",
+                    'bind'       => [
+                        1 => $tbl_monitoring_task_details->uint_monitor_test_index
+                    ]
+                ]
+            );
+
+            if (is_object($tbl_test))
+            {
+                echo "test->name: $tbl_test->char_test_name \n";
+                echo "test->type: $tbl_test->uint_test_type \n";
+                /*
+                 * Fire actual tests here
+                 */
+            }
+            if (isset($tbl_monitoring_task_details->uint_monitor_test_wait)) 
+                echo "tbl_monitoring_task_details->uint_monitor_test_wait: $tbl_monitoring_task_details->uint_monitor_test_wait \n";
+            /*
+             * Use this wait time after all tests are triggered in that perticular 
+             * queue index and parallely need to trigger in all stbs
+             */
+        }
+    }
+ 
+    /*
+     * Process individal jobs in job queue
+     */
+    private function processJob($tbl_job)
+    {
+
         $tbl_internal_test_queue = TblInternalQueue::find(
             [
                 'columns'    => '*',
@@ -355,6 +414,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             /*
              * find monitoring tests link to the Queue and fire it.
              */
+            $this->processMonTasks($tbl_internal_test_details);
 
         }
     }

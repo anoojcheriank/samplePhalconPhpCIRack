@@ -89,7 +89,7 @@ class TblMonitoringTaskSeqOfTestController extends ControllerBase
             $this->tag->setDefault("uint_internalQ_mapping_index", $tbl_monitoring_task_seq_of_test->uint_internalQ_mapping_index);
             $this->tag->setDefault("uint_monitor_task_seq_order", $tbl_monitoring_task_seq_of_test->uint_monitor_task_seq_order);
             $this->tag->setDefault("uint_monitor_test_index", $tbl_monitoring_task_seq_of_test->uint_monitor_test_index);
-            $this->tag->setDefault("time_monitor_test_wait", $tbl_monitoring_task_seq_of_test->time_monitor_test_wait);
+            $this->tag->setDefault("uint_monitor_test_wait", $tbl_monitoring_task_seq_of_test->uint_monitor_test_wait);
             $this->tag->setDefault("datetime_monitor_test_start", $tbl_monitoring_task_seq_of_test->datetime_monitor_test_start);
             $this->tag->setDefault("datetime_monitor_test_finish", $tbl_monitoring_task_seq_of_test->datetime_monitor_test_finish);
             $this->tag->setDefault("uint_monitor_test_status", $tbl_monitoring_task_seq_of_test->uint_monitor_test_status);
@@ -116,7 +116,7 @@ class TblMonitoringTaskSeqOfTestController extends ControllerBase
         $tbl_monitoring_task_seq_of_test->uint_internalQ_mapping_index = $this->request->getPost("uint_internalQ_mapping_index");
         $tbl_monitoring_task_seq_of_test->uint_monitor_task_seq_order = $this->request->getPost("uint_monitor_task_seq_order");
         $tbl_monitoring_task_seq_of_test->uint_monitor_test_index = $this->request->getPost("uint_monitor_test_index");
-        $tbl_monitoring_task_seq_of_test->time_monitor_test_wait = $this->request->getPost("time_monitor_test_wait");
+        $tbl_monitoring_task_seq_of_test->uint_monitor_test_wait = $this->request->getPost("uint_monitor_test_wait");
         $tbl_monitoring_task_seq_of_test->datetime_monitor_test_start = $this->request->getPost("datetime_monitor_test_start");
         $tbl_monitoring_task_seq_of_test->datetime_monitor_test_finish = $this->request->getPost("datetime_monitor_test_finish");
         $tbl_monitoring_task_seq_of_test->uint_monitor_test_status = $this->request->getPost("uint_monitor_test_status");
@@ -177,7 +177,7 @@ class TblMonitoringTaskSeqOfTestController extends ControllerBase
         $tbl_monitoring_task_seq_of_test->uint_internalQ_mapping_index = $this->request->getPost("uint_internalQ_mapping_index");
         $tbl_monitoring_task_seq_of_test->uint_monitor_task_seq_order = $this->request->getPost("uint_monitor_task_seq_order");
         $tbl_monitoring_task_seq_of_test->uint_monitor_test_index = $this->request->getPost("uint_monitor_test_index");
-        $tbl_monitoring_task_seq_of_test->time_monitor_test_wait = $this->request->getPost("time_monitor_test_wait");
+        $tbl_monitoring_task_seq_of_test->uint_monitor_test_wait = $this->request->getPost("uint_monitor_test_wait");
         $tbl_monitoring_task_seq_of_test->datetime_monitor_test_start = $this->request->getPost("datetime_monitor_test_start");
         $tbl_monitoring_task_seq_of_test->datetime_monitor_test_finish = $this->request->getPost("datetime_monitor_test_finish");
         $tbl_monitoring_task_seq_of_test->uint_monitor_test_status = $this->request->getPost("uint_monitor_test_status");
