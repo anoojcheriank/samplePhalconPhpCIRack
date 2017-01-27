@@ -2,17 +2,20 @@
 
 class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
 {
+    /*
+     *  Job hander executes the Job specified in the internal database Queue
+     */
+    //private $jobHandler; // = new TblJobQueue(); //new CiRackTestingJobHandlerController();
+
+    public function onConstruct()
+    {
+        //$this->jobHandler = new CiRackTestingJobHandlerController();
+    }
 
     public function indexAction()
     {
-
     }
     
-    public function someFn()
-    {
-        echo "\n inside someFn";
-    }
-  
     /*
      * Save model specified in parameter to configured database;
      */
@@ -30,47 +33,52 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
      */
     private function checkJobDataValidity($jsonJob)
     {
-       if (!isset($jsonJob->job_id))
-       {
+        if (!isset($jsonJob->job_id))
+        {
             echo "jsonJob->job_id not set";
             return -1;
-       }
-       if (!isset($jsonJob->priority))
-       {
+        }
+        if (!isset($jsonJob->priority))
+        {
             echo "jsonJob->priority not set";
             return -1;
-       }
-       if (!isset($jsonJob->number_of_boxes))
-       {
+        }
+        if (!isset($jsonJob->number_of_boxes))
+        {
             echo "jsonJob->number_of_boxes not set";
             return -1;
-       }
+        }
+        if(0 == $jsonJob->number_of_boxes)
+        {
+            echo "jsonJob->number_of_boxes zero is not a vaild test";
+            return -1;
+        }
 
-       $build_details=$jsonJob->build_details;
-       if (!isset($build_details->build_name))
-       {
+        $build_details=$jsonJob->build_details;
+        if (!isset($build_details->build_name))
+        {
             echo "build_details->build_name not set";
             return -1;
-       }
-       if (!isset($build_details->build_platform))
-       {
+        }
+        if (!isset($build_details->build_platform))
+        {
             echo "build_details->build_platform not set";
             return -1;
-       }
-       if (!isset($build_details->build_type))
-       {
+        }
+        if (!isset($build_details->build_type))
+        {
             echo "build_details->build_type not set";
             return -1;
-       }
-       if (!isset($build_details->Middleware_version))
-       {
+        }
+        if (!isset($build_details->Middleware_version))
+        {
             echo "build_details->Middleware_version not set";
             return -1;
-       }
+        }
 
-       $tests_details=$jsonJob->tests_details;
-       foreach ($tests_details as $test) 
-       {
+        $tests_details=$jsonJob->tests_details;
+        foreach ($tests_details as $test) 
+        {
            if (!isset($test->name))
            {
                 echo "test->name not set";
@@ -132,11 +140,20 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                         return -1;
                     }
 
+                    if (isset($monitoring_task->timeout_in_minutes)) 
+                    {
+                        if (0 > $monitoring_task->timeout_in_minutes)
+                        {
+                            echo "Test timeout should be greater than zero";
+                            return -1;
+                        }
+                    }
+
 
                 }
             }
-        }
-        return 0;
+         }
+         return 0;
     }
 
     public function scheduleJob($jsonArg)
@@ -179,7 +196,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         $tbl_job_queue = new TblJobQueue();
         $tbl_job_queue->uint_job_id = $jsonJob->job_id;
         $tbl_job_queue->uint_priority = $jsonJob->priority;
-        $tbl_job_queue->uint_number_of_boxes = $jsonJob->priority;
+        $tbl_job_queue->uint_number_of_boxes = $jsonJob->number_of_boxes;
         $tbl_job_queue->uint_job_status = "SCHEDULED"; /*Need to add with enum*/
 
         $build_details=$jsonJob->build_details;
@@ -193,7 +210,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         /*
          * Check if build already exists in the queue. If yes link the existing build
          */
-        $tbl_build_detail_check = TblBuildDetails::findFirst(
+        $tbl_build_details_check = TblBuildDetails::findFirst(
             [
                 'columns'    => '*',
                 'conditions' => "char_build_md5sum = ?1",
@@ -202,10 +219,10 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                 ]
             ]
         );
-        if (is_object($tbl_build_detail_check))
+        if (is_object($tbl_build_details_check))
         {
-            echo "Binary already exists in queue name:: $tbl_build_detail_check->char_build_name \n";
-            $tbl_job_queue->uint_build_index = $tbl_build_detail_check->uint_build_index;
+            echo "Binary already exists in queue name:: $tbl_build_details_check->char_build_name \n";
+            $tbl_job_queue->uint_build_index = $tbl_build_details_check->uint_build_index;
             $this->saveModelFn($tbl_job_queue);
         }
         else
@@ -213,15 +230,15 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             /*
              * Save build details
              */
-            $tbl_build_detail = new TblBuildDetails();
-            $tbl_build_detail->char_build_name = $build_details->build_name;
-            $tbl_build_detail->uint_box_platform = $build_details->build_platform;
-            $tbl_build_detail->char_build_md5sum = $build_md5sum;    
-            $tbl_build_detail->uint_build_type = 1; //$build_details->build_type;
-            $tbl_build_detail->char_middleware_version = $build_details->Middleware_version;
-            $this->saveModelFn($tbl_build_detail);
+            $tbl_build_details = new TblBuildDetails();
+            $tbl_build_details->char_build_name = $build_details->build_name;
+            $tbl_build_details->uint_box_platform = $build_details->build_platform;
+            $tbl_build_details->char_build_md5sum = $build_md5sum;    
+            $tbl_build_details->uint_build_type = 1; //$build_details->build_type;
+            $tbl_build_details->char_middleware_version = $build_details->Middleware_version;
+            $this->saveModelFn($tbl_build_details);
 
-            $tbl_job_queue->uint_build_index = $tbl_build_detail->getWriteConnection()->lastInsertId();
+            $tbl_job_queue->uint_build_index = $tbl_build_details->getWriteConnection()->lastInsertId();
             $this->saveModelFn($tbl_job_queue);
         }
         
@@ -233,7 +250,6 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             echo "test[type]: $test->type \n";
             /*
              * No need to add test details details are already aaded and only need to link to 
-             * 
              */
             $tbl_internal_queue = new TblInternalQueue();
             $tbl_internal_queue->uint_job_id = $tbl_job_queue->uint_job_id;
@@ -308,7 +324,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Process individal jobs in job queue
      */
-    private function processMonTasks($tbl_internal_test_details)
+    private function processMonTasks($tbl_internal_test_details, $jobHandler)
     {
 
         $time_out_in_mins = 3* 24 * 60; /*Two days run by default if not specified else*/        
@@ -350,16 +366,17 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             {
                 echo "test->name: $tbl_test->char_test_name \n";
                 echo "test->type: $tbl_test->uint_test_type \n";
-                /*
-                 * Fire actual tests here
-                 */
             }
-            if (isset($tbl_monitoring_task_details->uint_monitor_test_wait)) 
+            if (isset($tbl_monitoring_task_details->uint_monitor_test_wait))
+            {
                 echo "tbl_monitoring_task_details->uint_monitor_test_wait: $tbl_monitoring_task_details->uint_monitor_test_wait \n";
+                /*Update job wait itme in job handler*/
+                $jobHandler->updateWaitTime($tbl_monitoring_task_details->uint_monitor_test_wait);
+            }
             /*
-             * Use this wait time after all tests are triggered in that perticular 
-             * queue index and parallely need to trigger in all stbs
+             * Add test cases to Job handler
              */
+            $jobHandler->insertTest($tbl_test);
         }
     }
  
@@ -368,6 +385,29 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
      */
     private function processJob($tbl_job)
     {
+        /*Create a job handler to execute the task*/
+        $jobHandler = new CiRackTestingJobHandlerController();
+
+        /*
+         * Add the build name and build type to Job Handler
+         */
+        $tbl_build_details = TblBuildDetails::findFirst(
+            [
+                'columns'    => '*',
+                'conditions' => "uint_build_index = ?1",
+                'bind'       => [
+                        1 => $tbl_job->uint_build_index,
+                    ]
+            ]
+        );
+
+        if (!is_object($tbl_build_details))
+        {
+            echo "Not able to find build details of Job id: $tbl_job->uint_job_id \n";
+            return -1;
+        }
+
+        $jobHandler->updateBuildDetails($tbl_build_details); 
 
         $tbl_internal_test_queue = TblInternalQueue::find(
             [
@@ -386,7 +426,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             return -1;
         }
 
-        
+
         foreach ($tbl_internal_test_queue as $tbl_internal_test_details) 
         {
             /*
@@ -410,17 +450,26 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                  * Fire actual tests here
                  */
             }
+            /*
+             * Add test cases to Job handler
+             */
+            $jobHandler->insertTest($tbl_test);
 
             /*
              * find monitoring tests link to the Queue and fire it.
              */
-            $this->processMonTasks($tbl_internal_test_details);
+            $this->processMonTasks($tbl_internal_test_details, $jobHandler);
 
         }
+        /**
+         * Start the test execution
+         **/
+        $jobHandler->executeTestList();
+
     }
   
 
-   /*
+    /*
      * Process Job queue based on priority
      */
     public function processJobQueue()
@@ -440,8 +489,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             echo "Job queue is empty \n";
             return -1;
         }
-
-        
+ 
         foreach ($tbl_job_queue as $tbl_job) 
         {
             echo "job_id: $tbl_job->uint_job_id \n";
@@ -450,6 +498,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             $this->processJob($tbl_job);
             //$tbl_job_queue->uint_job_status = "SCHEDULED"; /*Need to add with enum*/
         }
+
     }
 
 }

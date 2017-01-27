@@ -1,8 +1,8 @@
 {
         "__job" : {
-                "job_id" : 1,
-                "priority" : 1,
-                "number_of_boxes" : 1,             
+                "job_id" : 7,
+                "priority" : 3,
+                "number_of_boxes" : 4,             
                 "build_details" : {
                         "build_name" : "xwing412-NGDEV-69180_ThreadPriority_HQ004-01.08.00-sky_trials",
                         "build_platform" : "xwing",
