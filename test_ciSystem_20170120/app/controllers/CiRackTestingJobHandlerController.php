@@ -1,5 +1,7 @@
 <?php
 
+require realpath('..') ."/app/library/Telnet.php";
+
 class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
 {
     /*
@@ -98,23 +100,33 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     public function executeTest()
     {
         $this->listTestList();
+        
         /*
          * Check if slot free and execute all the tests 
          * associated in that specific slot
          */
+        /*
         $slotController = new CiRackTestingSlotController();
         $tbl_slot = $slotController->getAvailableSlot($this->build_platform);
-        if (is_object($tbl_slot))
+        if (is_object($tbl_slot) || null==$tbl_slot)
         {
-            echo "Free slots not available";
+            echo "Free slots not available \n";
             return -1;
         }
         $tbl_box = $slotController->getBoxInSlot($tbl_slot);
-        if (is_object($tbl_box))
+        if (is_object($tbl_box) || null==$tbl_box)
         {
-            echo "Unable to get box for the slot $tbl_slot->uint_slot_index";
+            echo "Unable to get box for the slot $tbl_slot->uint_slot_index\n";
             return -1;
         }
+        */
+        echo "Vadaaaa------------------------------------";
+        $telnetConnection = new Telnet('172.16.2.130');
+        $telnetConnection->login("root");
+        echo "Anoojjjjjjjjj";
+        $telnetConnection->setPrompt("#");
+        $return = $telnetConnection->exec("print");
+        print_r($return);        
     }
 
     /*
