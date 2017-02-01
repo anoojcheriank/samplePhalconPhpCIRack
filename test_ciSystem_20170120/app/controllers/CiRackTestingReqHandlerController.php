@@ -156,6 +156,10 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
          return 0;
     }
 
+    /*
+     * Schedule the job specified in json to 
+     * internal database job queue
+     */
     public function scheduleJob($jsonArg)
     {
         $jsonJob=$jsonArg->__job;
@@ -376,7 +380,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             /*
              * Add test cases to Job handler
              */
-            $jobHandler->insertTest($tbl_test);
+            $jobHandler->appendToTestlist($tbl_test);
         }
     }
  
@@ -453,7 +457,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             /*
              * Add test cases to Job handler
              */
-            $jobHandler->insertTest($tbl_test);
+            $jobHandler->appendToTestlist($tbl_test);
 
             /*
              * find monitoring tests link to the Queue and fire it.
