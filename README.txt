@@ -9,6 +9,9 @@ git commit -m "first commit"
 git remote add origin https://github.com/anoojcheriank/samplePhalconPhpCIRack.git
 git push -u origin master
 
+git push
+
+
 commit modifirf files
 ---------------------
 git commit -m "git commnds added" ./README.txt
