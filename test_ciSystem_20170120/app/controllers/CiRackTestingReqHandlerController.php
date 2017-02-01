@@ -468,7 +468,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         /**
          * Start the test execution
          **/
-        $jobHandler->executeTestList();
+        $jobHandler->executeTest();
 
     }
   
