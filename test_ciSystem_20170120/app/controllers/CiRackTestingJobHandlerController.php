@@ -1,6 +1,14 @@
 <?php
 
+/*
+ * Telnet library to control the box
+ */
 require realpath('..') ."/app/library/Telnet.php";
+
+/*
+ * Thread library to do parallel processing
+ */
+require_once (realpath('..') ."/app/library/Thread.php");
 
 class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
 {
@@ -93,6 +101,36 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             $this->waitTime = $newWaitTime;
         }
     }  
+
+    /*
+     * Execute bash script in the box
+     */
+    public function executeBashScriptinBox ($boxip,$test)
+    {
+        $telnetConnection = new Telnet('172.16.2.130', '23', 10, "login:", 1);
+        $telnetConnection->login("root", "");
+        $telnetConnection->setPrompt("#");
+        $return = $telnetConnection->exec("ls");
+        print_r($return);       
+        echo "\n"; 
+    }
+
+
+    /*
+     * Execute bash script in the box
+     */
+    public static function executeBashScriptinBoxStaticThread ($jobHandler, $boxip, $test)
+    {
+        if (!is_object($jobHandler) || null==$jobHandler)
+        {
+            echo "jobHandler not exists \n";
+            return -1;
+        }
+        //$boxip=$arguments[0];
+        //$test=$arguments[1];
+        $jobHandler->executeBashScriptinBox($boxip, $test);
+
+    }
    
     /*
      * Execute the test based on slot availability.
@@ -120,13 +158,23 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             return -1;
         }
         */
-        echo "Vadaaaa------------------------------------";
-        $telnetConnection = new Telnet('172.16.2.130');
-        $telnetConnection->login("root");
-        echo "Anoojjjjjjjjj";
-        $telnetConnection->setPrompt("#");
-        $return = $telnetConnection->exec("print");
-        print_r($return);        
+       
+        // test to see if threading is available
+        if( ! Thread::isAvailable() ) {
+            die( 'Threads not supported' );
+            echo "\n";
+        }
+        //$executeBashScriptinBox=$this->executeBashScriptinBox;
+        // create 2 thread objects
+        $t1 = new Thread('CiRackTestingJobHandlerController::executeBashScriptinBoxStaticThread');
+        // start them
+        $t1->start($this, 10, 't1');
+
+        // keep the program running until the threads finish
+        while($t1->isAlive()) {
+
+        }
+        
     }
 
     /*
