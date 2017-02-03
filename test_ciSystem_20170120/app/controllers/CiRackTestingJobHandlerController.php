@@ -110,7 +110,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         $telnetConnection = new Telnet('172.16.2.130', '23', 10, "login:", 1);
         $telnetConnection->login("root", "");
         $telnetConnection->setPrompt("#");
-        $return = $telnetConnection->exec("ls");
+        $return = $telnetConnection->exec("echo $(( RANDOM % (10 - 5 + 1 ) + 5 ))");
         print_r($return);       
         echo "\n"; 
     }
@@ -131,12 +131,15 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         $jobHandler->executeBashScriptinBox($boxip, $test);
 
     }
-   
+    private $iCount = 0;
+
     /*
      * Execute the test based on slot availability.
      */ 
     public function executeTest()
     {
+        $this->iCount++;
+        echo "executeTest count $this->iCount\n";
         $this->listTestList();
         
         /*
@@ -158,7 +161,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             return -1;
         }
         */
-       
+        
         // test to see if threading is available
         if( ! Thread::isAvailable() ) {
             die( 'Threads not supported' );
@@ -174,7 +177,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         while($t1->isAlive()) {
 
         }
-        
+       
     }
 
     /*
