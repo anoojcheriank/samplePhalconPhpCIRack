@@ -88,7 +88,7 @@ class TblSlotConfigController extends ControllerBase
             $this->tag->setDefault("uint_slot_index", $tbl_slot_config->uint_slot_index);
             $this->tag->setDefault("rack_name", $tbl_slot_config->rack_name);
             $this->tag->setDefault("rack_number", $tbl_slot_config->rack_number);
-            $this->tag->setDefault("bool_slot_availability", $tbl_slot_config->bool_slot_availability);
+            $this->tag->setDefault("uint_slot_availability", $tbl_slot_config->uint_slot_availability);
             $this->tag->setDefault("uint_box_index", $tbl_slot_config->uint_box_index);
             $this->tag->setDefault("uint_rack_type", $tbl_slot_config->uint_rack_type);
             
@@ -112,7 +112,7 @@ class TblSlotConfigController extends ControllerBase
         $tbl_slot_config = new TblSlotConfig();
         $tbl_slot_config->rack_name = $this->request->getPost("rack_name");
         $tbl_slot_config->rack_number = $this->request->getPost("rack_number");
-        $tbl_slot_config->bool_slot_availability = $this->request->getPost("bool_slot_availability");
+        $tbl_slot_config->uint_slot_availability = $this->request->getPost("uint_slot_availability");
         $tbl_slot_config->uint_box_index = $this->request->getPost("uint_box_index");
         $tbl_slot_config->uint_rack_type = $this->request->getPost("uint_rack_type");
         
@@ -170,7 +170,7 @@ class TblSlotConfigController extends ControllerBase
 
         $tbl_slot_config->rack_name = $this->request->getPost("rack_name");
         $tbl_slot_config->rack_number = $this->request->getPost("rack_number");
-        $tbl_slot_config->bool_slot_availability = $this->request->getPost("bool_slot_availability");
+        $tbl_slot_config->uint_slot_availability = $this->request->getPost("uint_slot_availability");
         $tbl_slot_config->uint_box_index = $this->request->getPost("uint_box_index");
         $tbl_slot_config->uint_rack_type = $this->request->getPost("uint_rack_type");
         

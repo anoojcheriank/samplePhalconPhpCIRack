@@ -61,7 +61,7 @@ CREATE TABLE tbl_slot_config
   uint_slot_index integer unsigned NOT NULL AUTO_INCREMENT,
   rack_name varchar(50) NOT NULL DEFAULT "s13034hv16",
   rack_number integer unsigned NOT NULL,
-  bool_slot_availability bit(1) NOT NULL DEFAULT 1,
+  uint_slot_availability integer unsigned NOT NULL DEFAULT 0,
   uint_box_index integer unsigned NOT NULL DEFAULT 1,
   uint_rack_type integer unsigned,
   CONSTRAINT int_slot_index PRIMARY KEY (uint_slot_index)

@@ -43,7 +43,7 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
         /*
          * Check available slots
          */
-        $tbl_slots = TblSlotConfig::find("bool_slot_availability = '0'");
+        $tbl_slots = TblSlotConfig::find("uint_slot_availability = '0'");
 
         if (!is_object($tbl_slots))
         {

@@ -31,7 +31,7 @@ class TblSlotConfig extends \Phalcon\Mvc\Model
      * @var string
      * @Column(type="string", length=1, nullable=false)
      */
-    public $bool_slot_availability;
+    public $uint_slot_availability;
 
     /**
      *
