@@ -131,22 +131,17 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         $jobHandler->executeBashScriptinBox($boxip, $test);
 
     }
-    private $iCount = 0;
 
     /*
      * Execute the test based on slot availability.
      */ 
     public function executeTest()
     {
-        $this->iCount++;
-        echo "executeTest count $this->iCount\n";
-        $this->listTestList();
         
         /*
          * Check if slot free and execute all the tests 
          * associated in that specific slot
          */
-        /*
         $slotController = new CiRackTestingSlotController();
         $tbl_slot = $slotController->getAvailableSlot($this->build_platform);
         if (is_object($tbl_slot) || null==$tbl_slot)
@@ -154,29 +149,34 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             echo "Free slots not available \n";
             return -1;
         }
+
         $tbl_box = $slotController->getBoxInSlot($tbl_slot);
         if (is_object($tbl_box) || null==$tbl_box)
         {
             echo "Unable to get box for the slot $tbl_slot->uint_slot_index\n";
             return -1;
         }
-        */
         
-        // test to see if threading is available
+        /*
+         * See if threading is available
+         */
         if( ! Thread::isAvailable() ) {
             die( 'Threads not supported' );
             echo "\n";
         }
-        //$executeBashScriptinBox=$this->executeBashScriptinBox;
-        // create 2 thread objects
+
+        /*
+         * Execute bash script logic. check if bash script is specified.
+         */
         $t1 = new Thread('CiRackTestingJobHandlerController::executeBashScriptinBoxStaticThread');
-        // start them
+
+        /*
+         * start them
+         */
         $t1->start($this, 10, 't1');
 
         // keep the program running until the threads finish
-        while($t1->isAlive()) {
-
-        }
+        while($t1->isAlive()) {}
        
     }
 

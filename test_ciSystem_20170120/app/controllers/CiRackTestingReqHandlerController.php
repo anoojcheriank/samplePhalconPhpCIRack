@@ -577,6 +577,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                  * Fire actual tests here
                  */
             }
+
             /*
              * Add test cases to Job handler
              */
@@ -588,6 +589,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             $this->processMonTasks($tbl_internal_test_details, $jobHandler);
 
         }
+
         /**
          * Start the test execution
          **/
