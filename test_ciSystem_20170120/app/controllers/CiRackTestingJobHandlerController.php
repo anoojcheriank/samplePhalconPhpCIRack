@@ -110,7 +110,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         $telnetConnection = new Telnet('172.16.2.130', '23', 10, "login:", 1);
         $telnetConnection->login("root", "");
         $telnetConnection->setPrompt("#");
-        $return = $telnetConnection->exec("echo $(( RANDOM % (10 - 5 + 1 ) + 5 ))");
+        $return = $telnetConnection->exec("echo \$RANDOM;");
         print_r($return);       
         echo "\n"; 
     }
