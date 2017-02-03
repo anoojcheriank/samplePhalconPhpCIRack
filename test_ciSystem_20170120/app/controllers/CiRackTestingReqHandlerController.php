@@ -28,6 +28,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         }
     }
 
+
     /*
      * Checks if shared json Job is valid
      */
@@ -324,6 +325,30 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         }
 
     }
+
+    /*
+     * List all job ids
+     */
+    public function listAllJobIds()
+    {
+        /*
+         * Check if job already exists in the queue. If yes exit
+         */
+        $tbl_job_queue = TblJobQueue::find();
+        if (!is_object($tbl_job_queue))
+        {
+            echo "Job queue is empty\n";
+            return -1;
+        }
+        echo "Jobs \n";
+        echo "---- \n";
+        foreach ($tbl_job_queue as $tbl_job) 
+        {
+            echo "ID: $tbl_job->uint_job_id  Priority: $tbl_job->uint_priority Status: $tbl_job->uint_job_status\n";
+        }
+
+    }
+
 
     /*
      * Process individal jobs in job queue

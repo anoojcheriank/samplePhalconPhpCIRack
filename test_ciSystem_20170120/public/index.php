@@ -67,7 +67,27 @@ try {
 
         }
     );
-    
+
+    /**
+     * scheduleJob webservice
+     */
+    $app->post(
+        "/ciRack/listJobs",
+        function () use ($app){
+            try {
+              $jsonJob = $app->request->getJsonRawBody();
+
+              $ciRackHandle = new CiRackTestingReqHandlerController();
+              //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
+              $ciRackHandle->listAllJobIds();
+
+            }catch (Exception $e) {
+                echo 'Caught exception: '.  $e->getMessage(). "\n";
+            }
+
+        }
+    );
+   
 
     /**
      * scheduleJob webservice
