@@ -28,6 +28,19 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         }
     }
 
+    /*
+     * Delete model specified in parameter to configured database;
+     */
+    private function deleteModelFn($modelObject)
+    {
+        if (!$modelObject->delete()) {
+            foreach ($modelObject->getMessages() as $message) {
+                print_r($message);
+            }
+        }
+    }
+
+
 
     /*
      * Checks if shared json Job is valid
@@ -349,6 +362,91 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
 
     }
 
+    /*
+     * cancel specified Job
+     */
+    public function cancelJob($jobid)
+    {
+        /*
+         * Get Job based on Job id.
+         */
+        $tbl_job = TblJobQueue::findFirst(
+            [
+                'columns'    => '*',
+                'conditions' => "uint_job_id = ?1",
+                'bind'       => [
+                    1 => $jobid,
+                ]
+            ]
+        );
+        if (!is_object($tbl_job))
+        {
+            echo "Specified jobid not exists in database ID: $jobid \n";
+            return 0;
+        }
+
+        /*
+         * Get Job based on Job id.
+         */
+        $tbl_internal_queue = TblInternalQueue::find(
+            [
+                'columns'    => '*',
+                'conditions' => "uint_job_id = ?1",
+                'bind'       => [
+                    1 => $jobid,
+                ]
+            ]
+        );
+        if (!is_object($tbl_internal_queue))
+        {
+            echo "No test specified in the Job: $jobid \n";
+            return 0;
+        }
+      
+        foreach ($tbl_internal_queue as $tbl_internal_job) 
+        {
+
+            /*
+             * Get Job based on Job id.
+             */
+            $monitoring_tasks = TblMonitoringTaskSeqOfTest::find(
+                [
+                    'columns'    => '*',
+                    'conditions' => "uint_internalQ_mapping_index = ?1",
+                    'bind'       => [
+                        1 => $tbl_internal_job->uint_internalQ_mapping_index,
+                    ]
+                ]
+            );
+            if (!is_object($monitoring_tasks))
+            {
+                echo "No monitoring tasks for testid: $tbl_internal_job->uint_internalQ_mapping_index \n";
+                return 0;
+            }
+          
+            foreach ($monitoring_tasks as $monitoring_task) 
+            {
+                /*
+                 * Delete associated monitoring tasks
+                 */
+                $this->deleteModelFn($monitoring_task);
+                echo "Deleted associated monitoring job with id: $monitoring_task->uint_monitror_test_mapping_index \n";
+            }
+            /*
+             * Delete associated monitoring tasks
+             */
+            $this->deleteModelFn($tbl_internal_job);
+            echo "Deleted internal job with id: $tbl_internal_job->uint_internalQ_mapping_index \n";
+         
+        }
+
+        /*
+         * Delete job
+         */
+        $this->deleteModelFn($tbl_job);//Need to do at last
+        echo "Deleted job with id: $tbl_job->uint_job_id \n";
+
+    }
 
     /*
      * Process individal jobs in job queue

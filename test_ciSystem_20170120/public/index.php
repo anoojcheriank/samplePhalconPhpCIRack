@@ -69,13 +69,12 @@ try {
     );
 
     /**
-     * scheduleJob webservice
+     * listJobs webservice
      */
-    $app->post(
+    $app->get(
         "/ciRack/listJobs",
         function () use ($app){
             try {
-              $jsonJob = $app->request->getJsonRawBody();
 
               $ciRackHandle = new CiRackTestingReqHandlerController();
               //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
@@ -88,6 +87,26 @@ try {
         }
     );
    
+    /**
+     * cancelJob webservice
+     */
+    $app->post(
+        "/ciRack/cancelJob",
+        function () use ($app){
+            try {
+              $jobId = $app->request->getRawBody();
+              echo "jobId: $jobId \n";
+              $ciRackHandle = new CiRackTestingReqHandlerController();
+              //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
+              $ciRackHandle->cancelJob($jobId);
+
+            }catch (Exception $e) {
+                echo 'Caught exception: '.  $e->getMessage(). "\n";
+            }
+
+        }
+    );
+
 
     /**
      * scheduleJob webservice
@@ -96,8 +115,8 @@ try {
         "/ciRack/scheduleJob",
         function () use ($app){
             try {
-              $jsonJob = $app->request->getJsonRawBody();
 
+              $jsonJob = $app->request->getJsonRawBody();
               $ciRackHandle = new CiRackTestingReqHandlerController();
               //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
               $ciRackHandle->scheduleJob($jsonJob);
@@ -116,7 +135,6 @@ try {
         "/ciRack/processJobQueue",
         function () use ($app){
             try {
-              $jsonJob = $app->request->getJsonRawBody();
 
               $ciRackHandle = new CiRackTestingReqHandlerController();
               //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
