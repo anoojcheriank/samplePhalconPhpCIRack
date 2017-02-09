@@ -40,6 +40,32 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         }
     }
 
+    /*
+     * get test type index.
+     */
+    private function getTestTypeIndex($testType)
+    {
+        $ret = -1;
+        switch ($testType) {
+            case "pythonCdiProc":
+                $ret = 0;
+                break;
+            case "shellCdiProc":
+                $ret = 1;
+                break;
+            case "osterlyCdiProc":
+                $ret = 2;
+                break;
+            case "stormIR":
+                $ret = 3;
+                break;
+            case "timeBased":
+                $ret = 4;
+                break;
+           default:
+        }
+        return $ret; 
+    }
 
 
     /*
@@ -103,14 +129,15 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                 echo "test->type not set";
                 return -1;
            }
-
+           
+           $testType = $this->getTestTypeIndex($test->type);
            $tbl_test = TblTest::findFirst(
                 [
                     'columns'    => '*',
                     'conditions' => "char_test_name = ?1 AND uint_test_type = ?2",
                     'bind'       => [
                         1 => $test->name,
-                        2 => $test->type,
+                        2 => $testType,
                     ]
                 ]
             );
@@ -137,13 +164,14 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                         echo "monitoring_task->type not set";
                         return -1;
                     }
+                    $montestType = $this->getTestTypeIndex($monitoring_task->type);
                     $tbl_monitor_test = TblTest::findFirst(
                         [
                             'columns'    => '*',
                             'conditions' => "char_test_name = ?1 AND uint_test_type = ?2",
                             'bind'       => [
                                 1 => $monitoring_task->name,
-                                2 => $monitoring_task->type,
+                                2 => $montestType,
                             ]
                         ]
                     );
@@ -273,13 +301,14 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             $tbl_internal_queue->uint_job_id = $tbl_job_queue->uint_job_id;
             $tbl_internal_queue->uint_seq_order = $testCount;
             
+            $testType = $this->getTestTypeIndex($test->type);
             $tbl_test = TblTest::findFirst(
                 [
                     'columns'    => '*',
                     'conditions' => "char_test_name = ?1 AND uint_test_type = ?2",
                     'bind'       => [
                         1 => $test->name,
-                        2 => $test->type,
+                        2 => $testType,
                     ]
                 ]
             );
@@ -310,13 +339,14 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                         $tbl_monitoring_task_seq_of_test->uint_monitor_test_wait = $monitoring_task->timeout_in_minutes; /*Change this time to uint*/
                     }
 
+                    $monTestType = $this->getTestTypeIndex($monitoring_task->type);
                     $tbl_monitor_test = TblTest::findFirst(
                         [
                             'columns'    => '*',
                             'conditions' => "char_test_name = ?1 AND uint_test_type = ?2",
                             'bind'       => [
                                 1 => $monitoring_task->name,
-                                2 => $monitoring_task->type,
+                                2 => $monTestType,
                             ]
                         ]
                     );

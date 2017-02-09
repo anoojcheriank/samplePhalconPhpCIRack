@@ -1,4 +1,10 @@
 <?php
+abstract class SlotAvailability
+{
+    const NotAvailable = 0;
+    const Available = 1;
+}
+
 
 class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
 {
@@ -29,7 +35,7 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
         );
         if (is_object($tbl_box_detail))
         {
-            echo "Free slot available with index $tbl_slots->uint_slot_index \n";
+            echo "Free slot available with index $tbl_slot->uint_slot_index \n";
             return $tbl_box_detail;
         }
         return null;
@@ -43,7 +49,8 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
         /*
          * Check available slots
          */
-        $tbl_slots = TblSlotConfig::find("uint_slot_availability = '0'");
+        $slotAvailability=SlotAvailability::Available;
+        $tbl_slots = TblSlotConfig::find("uint_slot_availability = $slotAvailability");
 
         if (!is_object($tbl_slots))
         {
@@ -68,7 +75,7 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
             );
             if (is_object($tbl_box_detail))
             {
-                echo "Free slot available with index $tbl_slots->uint_slot_index \n";
+                echo "Free slot available with index $tbl_slot->uint_slot_index \n";
                 return $tbl_slot;
             }
         }

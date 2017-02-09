@@ -181,7 +181,8 @@ class Telnet {
 	 * @return boolean
 	 */
 	public function setPrompt($str = '$') {
-		return $this->setRegexPrompt(preg_quote($str, '/'));
+		//return $this->setRegexPrompt(preg_quote($str, '/'));
+        return $this->setRegexPrompt($str);
 	}
 	
 	/**
