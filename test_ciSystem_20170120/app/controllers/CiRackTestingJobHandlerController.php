@@ -42,7 +42,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     private $build_platform;    
 
     /*
-     *
+     * Telnet connection to box.
      */
     private $telnetConnection;
 
@@ -109,7 +109,8 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     /*
      * As a first level telent connections are made for each test
      * helps to reconnect if telnet connection disturbued and reestablished
-     * in between individual tests.
+     * in between individual tests. Currently doing from logs1 machine since my vm not accesssible
+     * outside
      */
     public function executeBashScriptiCdiProcInBox($boxip, $testName)
     {
