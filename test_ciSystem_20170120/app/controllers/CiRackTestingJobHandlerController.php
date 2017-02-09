@@ -113,7 +113,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
      */
     public function executeBashScriptInBox($boxip, $testName)
     {
-        $scp_yes_no="Do you want to continue connecting";
+        $scp_yes_no="Do you want to continue connecting?";
         $scp_password='password:';
 
         $this->telnetConnection = new Telnet($boxip, '23', 10, "login:", 1);
@@ -140,7 +140,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             echo "\n"; 
         }
         catch (Exception $e) {
-            sleep (1); /*Just to by passs password prompt*/
+           echo "\n"; /*Just to by passs password prompt*/
             $this->telnetConnection->setPrompt("#");
             $return = $this->telnetConnection->exec("rack1234#");
             print_r($return);       
