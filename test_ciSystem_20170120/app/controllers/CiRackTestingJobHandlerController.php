@@ -111,7 +111,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
      * helps to reconnect if telnet connection disturbued and reestablished
      * in between individual tests.
      */
-    public function executeBashScriptInBox($boxip, $testName)
+    public function executeBashScriptiCdiProcInBox($boxip, $testName)
     {
         $scp_yes_no="Do you want to continue connecting?";
         $scp_password='password:';
@@ -157,6 +157,14 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         echo "\n";
 
     }
+  
+    /*
+     * Execute cdi proc python file in box.
+     */
+    public function executePythonCdiProcInBox($boxip, $testName)
+    {
+
+    }
 
     /*
      * Execute bash script in the box
@@ -181,7 +189,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
                     break;
                 //shellCdiProc script
                 case 1:
-                    $this->executeBashScriptInBox($boxip, $test->char_test_name);
+                    $this->executeBashScriptiCdiProcInBox($boxip, $test->char_test_name);
                     break;
                 //osterlyCdiProc script
                 case 2:
