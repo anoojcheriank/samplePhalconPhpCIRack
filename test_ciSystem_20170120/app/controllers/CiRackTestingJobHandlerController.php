@@ -47,6 +47,11 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     private $telnetConnection;
 
     /*
+     * Job table index for the Job handler
+     */
+    private $tblJob;
+
+    /*
      * List all the tests based on the priority
      */   
     private function listTestList()
@@ -63,7 +68,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         /*Wait for waiting time*/
         echo "Waiting $this->waitTime minutes ...\n";
     }
-   
+
     /*
      * JobHandler constructor. 
      * Initializes member variables 
@@ -80,6 +85,14 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
 
     }
    
+    /*
+     *
+     */
+    public function UpdateTblJobDetails($tblJob)
+    {
+        $this->tblJob = $tblJob;
+    }
+
     /*
      * Append new test to the end of test list
      */    
@@ -276,6 +289,12 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             die( 'Threads not supported' );
             echo "\n";
         }
+
+        /*
+         * Set Job status in progress
+         */
+        $this->tbl_job->uint_job_status = JobState::InProgress;
+        GenModelUtilityController::saveModelFn($this->tbl_job);
 
         /*
          * Execute bash script logic. check if bash script is specified.

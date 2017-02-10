@@ -197,7 +197,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         $tbl_job_queue->uint_job_id = $jsonJob->job_id;
         $tbl_job_queue->uint_priority = $jsonJob->priority;
         $tbl_job_queue->uint_number_of_boxes = $jsonJob->number_of_boxes;
-        $tbl_job_queue->uint_job_status = "SCHEDULED"; /*Need to add with enum*/
+        $tbl_job_queue->uint_job_status = JobState::Scheduled; /*Need to add with enum*/
 
         $build_details=$jsonJob->build_details;
         echo "build_details[build_name]: $build_details->build_name \n";
