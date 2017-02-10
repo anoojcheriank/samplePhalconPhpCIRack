@@ -16,57 +16,6 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
     {
     }
     
-    /*
-     * Save model specified in parameter to configured database;
-     */
-    private function saveModelFn($modelObject)
-    {
-        if (!$modelObject->save()) {
-            foreach ($modelObject->getMessages() as $message) {
-                print_r($message);
-            }
-        }
-    }
-
-    /*
-     * Delete model specified in parameter to configured database;
-     */
-    private function deleteModelFn($modelObject)
-    {
-        if (!$modelObject->delete()) {
-            foreach ($modelObject->getMessages() as $message) {
-                print_r($message);
-            }
-        }
-    }
-
-    /*
-     * get test type index.
-     */
-    private function getTestTypeIndex($testType)
-    {
-        $ret = -1;
-        switch ($testType) {
-            case "pythonCdiProc":
-                $ret = 0;
-                break;
-            case "shellCdiProc":
-                $ret = 1;
-                break;
-            case "osterlyCdiProc":
-                $ret = 2;
-                break;
-            case "stormIR":
-                $ret = 3;
-                break;
-            case "timeBased":
-                $ret = 4;
-                break;
-           default:
-        }
-        return $ret; 
-    }
-
 
     /*
      * Checks if shared json Job is valid
@@ -105,6 +54,11 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             echo "build_details->build_platform not set";
             return -1;
         }
+        if (0 > GenModelUtilityController::getBuildPlatformIndex($build_details->build_platform))
+        {
+            echo "undefined box platform";
+            return -1;
+        }
         if (!isset($build_details->build_type))
         {
             echo "build_details->build_type not set";
@@ -130,7 +84,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                 return -1;
            }
            
-           $testType = $this->getTestTypeIndex($test->type);
+           $testType = GenModelUtilityController::getTestTypeIndex($test->type);
            $tbl_test = TblTest::findFirst(
                 [
                     'columns'    => '*',
@@ -164,7 +118,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                         echo "monitoring_task->type not set";
                         return -1;
                     }
-                    $montestType = $this->getTestTypeIndex($monitoring_task->type);
+                    $montestType = GenModelUtilityController::getTestTypeIndex($monitoring_task->type);
                     $tbl_monitor_test = TblTest::findFirst(
                         [
                             'columns'    => '*',
@@ -269,7 +223,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         {
             echo "Binary already exists in queue name:: $tbl_build_details_check->char_build_name \n";
             $tbl_job_queue->uint_build_index = $tbl_build_details_check->uint_build_index;
-            $this->saveModelFn($tbl_job_queue);
+            GenModelUtilityController::saveModelFn($tbl_job_queue);
         }
         else
         {
@@ -278,14 +232,14 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
              */
             $tbl_build_details = new TblBuildDetails();
             $tbl_build_details->char_build_name = $build_details->build_name;
-            $tbl_build_details->uint_box_platform = $build_details->build_platform;
+            $tbl_build_details->uint_box_platform = GenModelUtilityController::getBuildPlatformIndex($build_details->build_platform);
             $tbl_build_details->char_build_md5sum = $build_md5sum;    
             $tbl_build_details->uint_build_type = 1; //$build_details->build_type;
             $tbl_build_details->char_middleware_version = $build_details->Middleware_version;
-            $this->saveModelFn($tbl_build_details);
+            GenModelUtilityController::saveModelFn($tbl_build_details);
 
             $tbl_job_queue->uint_build_index = $tbl_build_details->getWriteConnection()->lastInsertId();
-            $this->saveModelFn($tbl_job_queue);
+            GenModelUtilityController::saveModelFn($tbl_job_queue);
         }
         
         $testCount = 1;
@@ -301,7 +255,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             $tbl_internal_queue->uint_job_id = $tbl_job_queue->uint_job_id;
             $tbl_internal_queue->uint_seq_order = $testCount;
             
-            $testType = $this->getTestTypeIndex($test->type);
+            $testType = GenModelUtilityController::getTestTypeIndex($test->type);
             $tbl_test = TblTest::findFirst(
                 [
                     'columns'    => '*',
@@ -319,7 +273,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                 $tbl_internal_queue->uint_test_index = $tbl_test->uint_test_index;
             }
 
-            $this->saveModelFn($tbl_internal_queue);
+            GenModelUtilityController::saveModelFn($tbl_internal_queue);
 
             if (isset($test->monitoring_tasks))
             {
@@ -339,7 +293,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                         $tbl_monitoring_task_seq_of_test->uint_monitor_test_wait = $monitoring_task->timeout_in_minutes; /*Change this time to uint*/
                     }
 
-                    $monTestType = $this->getTestTypeIndex($monitoring_task->type);
+                    $monTestType = GenModelUtilityController::getTestTypeIndex($monitoring_task->type);
                     $tbl_monitor_test = TblTest::findFirst(
                         [
                             'columns'    => '*',
@@ -358,7 +312,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                     }
 
 
-                    $this->saveModelFn($tbl_monitoring_task_seq_of_test);
+                    GenModelUtilityController::saveModelFn($tbl_monitoring_task_seq_of_test);
 
                     $monitorTestCount++;
                 }
@@ -459,13 +413,13 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                 /*
                  * Delete associated monitoring tasks
                  */
-                $this->deleteModelFn($monitoring_task);
+                GenModelUtilityController::deleteModelFn($monitoring_task);
                 echo "Deleted associated monitoring job with id: $monitoring_task->uint_monitror_test_mapping_index \n";
             }
             /*
              * Delete associated monitoring tasks
              */
-            $this->deleteModelFn($tbl_internal_job);
+            GenModelUtilityController::deleteModelFn($tbl_internal_job);
             echo "Deleted internal job with id: $tbl_internal_job->uint_internalQ_mapping_index \n";
          
         }
@@ -473,7 +427,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         /*
          * Delete job
          */
-        $this->deleteModelFn($tbl_job);//Need to do at last
+        GenModelUtilityController::deleteModelFn($tbl_job);//Need to do at last
         echo "Deleted job with id: $tbl_job->uint_job_id \n";
 
     }

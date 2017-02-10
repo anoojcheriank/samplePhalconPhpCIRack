@@ -141,9 +141,10 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             echo "\n"; 
         }
         catch (Exception $e) {
-           echo "\n"; /*Just to by passs password prompt*/
+            echo "\n"; 
             $this->telnetConnection->setPrompt("#");
             $return = $this->telnetConnection->exec("rack1234#");
+            
             print_r($return);       
             echo "\n"; 
         }
@@ -158,7 +159,15 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         echo "\n";
 
     }
-  
+ 
+    /*
+     * Execute cdi proc python file in box.
+     */
+    public function executeOsterlyCdiProcInBox($boxip, $testName)
+    {
+
+    }
+ 
     /*
      * Execute cdi proc python file in box.
      */
@@ -186,7 +195,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             switch ($test->uint_test_type) {
                 //pythonCdiProc script
                 case 0:
-                    
+                    $this->executePythonCdiProcInBox($boxip, $test->char_test_name); 
                     break;
                 //shellCdiProc script
                 case 1:
@@ -194,7 +203,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
                     break;
                 //osterlyCdiProc script
                 case 2:
-
+                    $this->executeOsterlyCdiProcInBox($boxip, $test->char_test_name);
                     break;
                 //stormIR script
                 case 3:
@@ -202,7 +211,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
                     break;
                 //timeBased script
                 case 4:
-
+                    //Do nothing as it is already taken care of.
                     break;
                default:
                    echo "Unsupported test type: $test->uint_test_type\n";
@@ -241,7 +250,6 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
      */ 
     public function executeTest()
     {
-        
         /*
          * Check if slot free and execute all the tests 
          * associated in that specific slot

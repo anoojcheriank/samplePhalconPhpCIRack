@@ -7,6 +7,11 @@ define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
 try {
+    /*
+     * Code for immediate printing.
+     */
+    ob_implicit_flush(false);
+    ob_start();
 
     /**
      * The FactoryDefault Dependency Injector automatically registers

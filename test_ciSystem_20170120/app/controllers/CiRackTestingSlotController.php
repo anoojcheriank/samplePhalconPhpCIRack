@@ -1,9 +1,9 @@
 <?php
-abstract class SlotAvailability
-{
-    const NotAvailable = 0;
-    const Available = 1;
-}
+
+/*
+ * General status enum collection
+ */
+require realpath('..') ."/app/library/CiRackStatus.php";
 
 
 class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
