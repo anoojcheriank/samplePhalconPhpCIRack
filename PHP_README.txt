@@ -20,3 +20,8 @@ function call backs with arguments
 ==================================
 http://php.net/manual/en/function.call-user-func-array.php
 
+
+change maximum-execution-time in php.ini
+=========================================
+http://stackoverflow.com/questions/5164930/fatal-error-maximum-execution-time-of-30-seconds-exceeded
+

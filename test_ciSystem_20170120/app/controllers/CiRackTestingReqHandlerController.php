@@ -1,5 +1,10 @@
 <?php
 
+/*
+ *  general enums
+ */
+require_once (realpath('..') ."/app/library/CiRackStatus.php");
+
 class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
 {
     /*
@@ -593,13 +598,17 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         $tbl_job_queue = TblJobQueue::find(
             [
                 'columns'    => '*',
-                "order" => "uint_priority ASC"
+                "order" => "uint_priority ASC",
+                /*'conditions' => "uint_job_status = ?1",
+                'bind'       => [
+                    1 => JobState::Scheduled
+                ]*/
             ]
         );
-
-        if (!is_object($tbl_job_queue))
+        $sceduledJobCount = iterator_count($tbl_job_queue);
+        if (0 == $sceduledJobCount)
         {
-            echo "Job queue is empty \n";
+            echo "Scheduled job queue is empty \n";
             return -1;
         }
  

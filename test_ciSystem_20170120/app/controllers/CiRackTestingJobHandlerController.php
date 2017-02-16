@@ -160,7 +160,9 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             echo "\n"; 
         }
         catch (Exception $e) {
-            echo "\n"; 
+            echo "\n";
+            $this->telnetConnection->readToPrompt(""); // since after exception clean whatever happent
+            echo "\n";
             $this->telnetConnection->setPrompt("#");
             $return = $this->telnetConnection->exec("rack1234#");
             
@@ -321,17 +323,16 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         while($t1->isAlive()) {}
  
         /*
+         * Set Job status in progress
+         */
+        $this->tblJob->uint_job_status = JobState::Completed;
+        GenModelUtilityController::saveModelFn($this->tblJob);
+
+        /*
          * Set slot if free
          */
         $slotController->setSlotIsFree($tbl_slot);
 
-        /*
-         * Set Job status in progress
-         */
-        $this->tblJob->uint_job_status = JobState::Completed;
-        GenModelUtilityController::saveModelFn($this->tbl_job);
-
-      
     }
 
     /*

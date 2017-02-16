@@ -239,6 +239,10 @@ class Telnet {
 		$this->buffer = '';
 	}
 
+    public function readToPrompt($prompt){
+        return $this->readTo($prompt);
+    }
+
 	/**
 	 * Reads characters from the socket and adds them to command buffer.
 	 * Handles telnet control characters. Stops when prompt is ecountered.
