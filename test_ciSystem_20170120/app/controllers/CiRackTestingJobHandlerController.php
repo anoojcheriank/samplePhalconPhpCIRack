@@ -135,6 +135,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     {
         $scp_yes_no="Do you want to continue connecting?";
         $scp_password='password:';
+        $test_server_ip="172.16.0.78";
 
         $this->telnetConnection = new Telnet($boxip, '23', 10, "login:", 1);
         $this->telnetConnection->login("root", "");
@@ -145,23 +146,35 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         $return = $this->telnetConnection->exec("rm -rf  /scripts/*;");
         print_r($return);       
         echo "\n";
-        try { 
-            $this->telnetConnection->setPrompt($scp_yes_no);
-            $return = $this->telnetConnection->exec("scp racktest@172.16.0.78:~/NFSMount/anoojc/sMethod/scripts-shell/$testName/* /scripts/;");
-            print_r($return);       
-            echo "\n"; 
-            $this->telnetConnection->setPrompt($scp_password);
-            $return = $this->telnetConnection->exec("y");
-            print_r($return);       
-            echo "\n"; 
+        try {
+            $return = $this->telnetConnection->exec("cat /root/.ssh/known_hosts | grep ".$test_server_ip." |cut -d ' ' -f 1;");
+            print_r($return);
+            echo "\n";
+            if (strpos($return,$test_server_ip) == false) 
+            {
+                $this->telnetConnection->setPrompt($scp_yes_no);
+                $return = $this->telnetConnection->exec("scp racktest@172.16.0.78:~/NFSMount/anoojc/sMethod/scripts-shell/$testName/* /scripts/;");
+                print_r($return);
+                echo "\n"; 
+                $return = $this->telnetConnection->exec("y");
+                print_r($return);       
+                echo "\n";
+            }
+            else
+            {
+                $this->telnetConnection->setPrompt($scp_password);
+                $return = $this->telnetConnection->exec("scp racktest@172.16.0.78:~/NFSMount/anoojc/sMethod/scripts-shell/$testName/* /scripts/;");
+                print_r($return);
+                echo "\n"; 
+            }
             $this->telnetConnection->setPrompt("#");
             $return = $this->telnetConnection->exec("rack1234#");
             print_r($return);       
             echo "\n"; 
         }
         catch (Exception $e) {
-            echo "\n";
-            $this->telnetConnection->readToPrompt(""); // since after exception clean whatever happent
+            #echo "\n";
+            #$this->telnetConnection->readToPrompt(""); // since after exception clean whatever happent
             echo "\n";
             $this->telnetConnection->setPrompt("#");
             $return = $this->telnetConnection->exec("rack1234#");
