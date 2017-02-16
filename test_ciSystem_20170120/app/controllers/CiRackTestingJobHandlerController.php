@@ -156,7 +156,8 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
                 $this->telnetConnection->setPrompt($scp_yes_no);
                 $return = $this->telnetConnection->exec("scp racktest@172.16.0.78:~/NFSMount/anoojc/sMethod/scripts-shell/$testName/* /scripts/;");
                 print_r($return);
-                echo "\n"; 
+                echo "\n";
+                echo "pppp\n"; 
                 $this->telnetConnection->setPrompt($scp_password);
                 $return = $this->telnetConnection->exec("y");
                 print_r($return);       
@@ -260,7 +261,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
          * Set new time limit for execution
          */
         set_time_limit(2*($this->waitTime * 60));
-        sleep ($this->waitTime * 60);
+        sleep ($this->waitTime * 6);
 
     }
 
