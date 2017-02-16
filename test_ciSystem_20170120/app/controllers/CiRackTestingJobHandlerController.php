@@ -150,12 +150,14 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             $return = $this->telnetConnection->exec("cat /root/.ssh/known_hosts | grep ".$test_server_ip." |cut -d ' ' -f 1;");
             print_r($return);
             echo "\n";
-            if (strpos($return,$test_server_ip) == false) 
+            if (strpos($return, $test_server_ip) == false) 
             {
+                echo "Anooj\n";
                 $this->telnetConnection->setPrompt($scp_yes_no);
                 $return = $this->telnetConnection->exec("scp racktest@172.16.0.78:~/NFSMount/anoojc/sMethod/scripts-shell/$testName/* /scripts/;");
                 print_r($return);
                 echo "\n"; 
+                $this->telnetConnection->setPrompt($scp_password);
                 $return = $this->telnetConnection->exec("y");
                 print_r($return);       
                 echo "\n";
