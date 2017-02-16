@@ -10,6 +10,12 @@ require realpath('..') ."/app/library/Telnet.php";
  */
 require_once (realpath('..') ."/app/library/Thread.php");
 
+/*
+ *  general enums
+ */
+require_once (realpath('..') ."/app/library/CiRackStatus.php");
+
+
 class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
 {
     /*
@@ -291,10 +297,15 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         }
 
         /*
+         * Set slot occupied
+         */
+        $slotController->setSlotOccupied($tbl_slot);
+
+        /*
          * Set Job status in progress
          */
-        $this->tbl_job->uint_job_status = JobState::InProgress;
-        GenModelUtilityController::saveModelFn($this->tbl_job);
+        $this->tblJob->uint_job_status = JobState::InProgress;
+        GenModelUtilityController::saveModelFn($this->tblJob);
 
         /*
          * Execute bash script logic. check if bash script is specified.
@@ -308,7 +319,19 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
 
         // keep the program running until the threads finish
         while($t1->isAlive()) {}
-       
+ 
+        /*
+         * Set slot if free
+         */
+        $slotController->setSlotIsFree($tbl_slot);
+
+        /*
+         * Set Job status in progress
+         */
+        $this->tblJob->uint_job_status = JobState::Completed;
+        GenModelUtilityController::saveModelFn($this->tbl_job);
+
+      
     }
 
     /*

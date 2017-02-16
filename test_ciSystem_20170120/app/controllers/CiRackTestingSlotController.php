@@ -3,7 +3,7 @@
 /*
  * General status enum collection
  */
-require realpath('..') ."/app/library/CiRackStatus.php";
+//require realpath('..') ."/app/library/CiRackStatus.php";
 
 
 class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
@@ -12,6 +12,34 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
     public function indexAction()
     {
 
+    }
+
+    public function setSlotIsFree($tbl_slot)
+    {
+        if (!is_object($tbl_slot))
+        {
+            echo "Slot specified nox exists \n";
+            return null;
+        }
+        /*
+         * Set slot occupied
+         */
+        $tbl_slot->uint_slot_availability = SlotAvailability::Available; 
+        GenModelUtilityController::saveModelFn($tbl_slot);
+    }
+
+    public function setSlotOccupied ($tbl_slot)
+    {
+        if (!is_object($tbl_slot))
+        {
+            echo "Slot specified nox exists \n";
+            return null;
+        }
+        /*
+         * Set slot occupied
+         */
+        $tbl_slot->uint_slot_availability = SlotAvailability::NotAvailable; 
+        GenModelUtilityController::saveModelFn($tbl_slot);
     }
     
     public function getBoxInSlot($tbl_slot)

@@ -399,7 +399,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
                     'conditions' => "uint_internalQ_mapping_index = ?1",
                     'bind'       => [
                         1 => $tbl_internal_job->uint_internalQ_mapping_index,
-                    ]
+                   ]
                 ]
             );
             if (!is_object($monitoring_tasks))
@@ -498,7 +498,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
     {
         /*Create a job handler to execute the task*/
         $jobHandler = new CiRackTestingJobHandlerController();
-
+        $jobHandler->UpdateTblJobDetails($tbl_job);
         /*
          * Add the build name and build type to Job Handler
          */
