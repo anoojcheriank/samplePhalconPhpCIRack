@@ -147,17 +147,20 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         print_r($return);       
         echo "\n";
         try {
-            $return = $this->telnetConnection->exec("cat /root/.ssh/known_hosts | grep ".$test_server_ip." |cut -d ' ' -f 1;");
+            $return = $this->telnetConnection->exec("cat /root/.ssh/known_hosts;");
             print_r($return);
             echo "\n";
-            if (strpos($return, $test_server_ip) == false) 
+            /*
+             * Check if server exists in valid hosts
+             */
+            $returnString = (string) $return;
+            $pos = strpos($returnString,$test_server_ip);
+            if (false === $pos) 
             {
-                echo "Anooj\n";
                 $this->telnetConnection->setPrompt($scp_yes_no);
                 $return = $this->telnetConnection->exec("scp racktest@172.16.0.78:~/NFSMount/anoojc/sMethod/scripts-shell/$testName/* /scripts/;");
                 print_r($return);
                 echo "\n";
-                echo "pppp\n"; 
                 $this->telnetConnection->setPrompt($scp_password);
                 $return = $this->telnetConnection->exec("y");
                 print_r($return);       
@@ -261,7 +264,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
          * Set new time limit for execution
          */
         set_time_limit(2*($this->waitTime * 60));
-        sleep ($this->waitTime * 6);
+        sleep ($this->waitTime * 15);
 
     }
 
@@ -317,7 +320,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         /*
          * Set slot occupied
          */
-        $slotController->setSlotOccupied($tbl_slot);
+        //$slotController->setSlotOccupied($tbl_slot); // disabled for better use
 
         /*
          * Set Job status in progress
