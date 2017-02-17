@@ -1,10 +1,5 @@
 <?php
 
-/*
- * General status enum collection
- */
-//require realpath('..') ."/app/library/CiRackStatus.php";
-
 
 class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
 {

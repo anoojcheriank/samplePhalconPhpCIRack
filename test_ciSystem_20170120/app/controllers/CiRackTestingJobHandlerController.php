@@ -11,6 +11,11 @@ require realpath('..') ."/app/library/Telnet.php";
 require_once (realpath('..') ."/app/library/Thread.php");
 
 /*
+ *  Bash shell script with time out
+ */
+require_once (realpath('..') ."/app/library/BashShell.php");
+
+/*
  *  general enums
  */
 require_once (realpath('..') ."/app/library/CiRackStatus.php");
@@ -211,15 +216,36 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Execute cdi proc python file in box.
      */
-    public function executePythonCdiProcInBox($boxip, $testName)
+    public function executePythonCdiProcInBox($boxip, $testName, $uint_box_index, $char_mac, $waitTime)
     {
-
+        /*
+         * execuet python script and save the logs in server.
+         */
+        $bashShell = new BashShell();
+        $pythonScriptPath = realpath('..') ."/external_scripts/scripts-python/";
+        $pythonExLogPath = realpath('..') .$pythonScriptPath."/LogStrestest/".$uint_box_index."/";
+        $pythonExLogFileName = "keyLog_".$char_mac."_".date('Y-m-d_h-i-s-ua').".log";
+        $pythonExLogFilePath = $pythonExLogPath.$pythonExLogFileName;
+        if (!file_exists($pythonExLogPath)) {
+            mkdir($pythonExLogPath, 0777, true);
+        }
+        $output = shell_exec("touch $pythonExLogFilePath; chmod 777 $pythonExLogFilePath;");
+        echo "$output \n";
+        $output = shell_exec("echo \"\" > ".$pythonExLogFilePath.";");
+        echo "$output \n";
+        $output = shell_exec("find ".$pythonScriptPath." -iname ".$testName." | tail -1");
+        $pythonFullPath = preg_replace('~[\r\n]+~', '', $output);
+        echo "Python script to execute $pythonFullPath $boxip\n";
+        //$output = shell_exec("python $pythonFullPath $boxip > $pythonExLogFilePath 2>$1; &");
+        $output = $bashShell->exec_timeout("bash -c \"python $pythonFullPath $boxip \> $pythonExLogFilePath 2\>$1;\"", 0);
+        echo "$output \n";
+        
     }
 
     /*
      * Execute bash script in the box
      */
-    public function executeTestListInBox ($boxip)
+    public function executeTestListInBox ($boxip, $uint_box_index, $char_mac)
     {
         /*
          * Based on test type execute the tests.
@@ -234,23 +260,24 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             echo "test: $test->char_test_name type: $test->uint_test_type \n";
             switch ($test->uint_test_type) {
                 //pythonCdiProc script
-                case 0:
-                    $this->executePythonCdiProcInBox($boxip, $test->char_test_name); 
+                case IntTestTypes::pythonCdiProc :
+                    $this->executePythonCdiProcInBox($boxip, $test->char_test_name, $uint_box_index, $char_mac, $this->waitTime); 
                     break;
                 //shellCdiProc script
-                case 1:
+                case IntTestTypes::shellCdiProc :
                     $this->executeBashScriptiCdiProcInBox($boxip, $test->char_test_name);
+                    sleep ($this->waitTime * 60);
                     break;
                 //osterlyCdiProc script
-                case 2:
+                case IntTestTypes::osterlyCdiProc :
                     $this->executeOsterlyCdiProcInBox($boxip, $test->char_test_name);
                     break;
                 //stormIR script
-                case 3:
+                case IntTestTypes::stormIR :
 
                     break;
                 //timeBased script
-                case 4:
+                case IntTestTypes::timeBased :
                     //Do nothing as it is already taken care of.
                     break;
                default:
@@ -264,7 +291,6 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
          * Set new time limit for execution
          */
         set_time_limit(2*($this->waitTime * 60));
-        sleep ($this->waitTime * 15);
 
     }
 
@@ -272,7 +298,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Execute bash script in the box
      */
-    public static function executeTestListInBoxStaticThread ($jobHandler, $boxip)
+    public static function executeTestListInBoxStaticThread ($jobHandler, $boxip, $uint_box_index, $char_mac)
     {
         if (!is_object($jobHandler) || null==$jobHandler)
         {
@@ -281,7 +307,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         }
         //$boxip=$arguments[0];
         //$test=$arguments[1];
-        $jobHandler->executeTestListInBox($boxip);
+        $jobHandler->executeTestListInBox($boxip, $uint_box_index, $char_mac);
 
     }
 
@@ -336,7 +362,7 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         /*
          * start them
          */
-        $t1->start($this, $tbl_box->char_box_ip);
+        $t1->start($this, $tbl_box->char_box_ip, $tbl_box->uint_box_index, $tbl_box->char_mac);
 
         // keep the program running until the threads finish
         while($t1->isAlive()) {}
