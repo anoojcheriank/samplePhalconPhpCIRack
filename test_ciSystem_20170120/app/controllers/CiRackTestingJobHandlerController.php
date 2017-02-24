@@ -8,7 +8,7 @@ require realpath('..') ."/app/library/Telnet.php";
 /*
  * Thread library to do parallel processing
  */
-require_once (realpath('..') ."/app/library/Thread.php");
+//require_once (realpath('..') ."/app/library/Thread.php");
 
 /*
  *  Bash shell script with time out
@@ -19,6 +19,11 @@ require_once (realpath('..') ."/app/library/BashShell.php");
  *  general enums
  */
 require_once (realpath('..') ."/app/library/CiRackStatus.php");
+
+/*
+ *  Logger added
+ */
+require_once (realpath('..') ."/app/library/Logger.php");
 
 
 class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
@@ -216,12 +221,18 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Execute cdi proc python file in box.
      */
-    public function executePythonCdiProcInBox($boxip, $testName, $uint_box_index, $char_mac, $waitTime)
+    public function executePythonCdiProcInBox($bashShell, $boxip, $testName, $uint_box_index, $char_mac)
     {
+
+        if (!is_object($bashShell) || null==$bashShell)
+        {
+            echo "bashShell not exists \n";
+            return -1;
+        }
+
         /*
          * execuet python script and save the logs in server.
          */
-        $bashShell = new BashShell();
         $pythonScriptPath = realpath('..') ."/external_scripts/scripts-python/";
         $pythonExLogPath = realpath('..') .$pythonScriptPath."/LogStrestest/".$uint_box_index."/";
         $pythonExLogFileName = "keyLog_".$char_mac."_".date('Y-m-d_h-i-s-ua').".log";
@@ -237,7 +248,8 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         $pythonFullPath = preg_replace('~[\r\n]+~', '', $output);
         echo "Python script to execute $pythonFullPath $boxip\n";
         //$output = shell_exec("python $pythonFullPath $boxip > $pythonExLogFilePath 2>$1; &");
-        $output = $bashShell->exec_timeout("bash -c \"python $pythonFullPath $boxip \> $pythonExLogFilePath 2\>$1;\"", 0);
+        //$output = $bashShell->exec_1_timeout("bash -c \"python $pythonFullPath $boxip \> $pythonExLogFilePath 2\>$1;\"", null, 2);
+        $output = $bashShell->execBashCmd("bash -c \"python $pythonFullPath $boxip \> $pythonExLogFilePath 2\>$1;\"", null);
         echo "$output \n";
         
     }
@@ -254,6 +266,11 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         echo "============= \n";
         echo "Build name: $this->build_name \n";
         echo "Build platform: $this->build_platform \n";
+
+        /*
+         * Creating a bash shell hanble by default.
+         */
+        $bashShell = new BashShell();
         foreach($this->testList as $test)
         {
             /*Start test and associated monitoring tests*/
@@ -261,12 +278,14 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             switch ($test->uint_test_type) {
                 //pythonCdiProc script
                 case IntTestTypes::pythonCdiProc :
-                    $this->executePythonCdiProcInBox($boxip, $test->char_test_name, $uint_box_index, $char_mac, $this->waitTime); 
+                    $logger = new Logger();
+                    $logger->log("This is a message");
+                    $this->executePythonCdiProcInBox($bashShell, $boxip, $test->char_test_name, $uint_box_index, $char_mac); 
+                    $logger->log("This is a messagei1");
                     break;
                 //shellCdiProc script
                 case IntTestTypes::shellCdiProc :
                     $this->executeBashScriptiCdiProcInBox($boxip, $test->char_test_name);
-                    sleep ($this->waitTime * 60);
                     break;
                 //osterlyCdiProc script
                 case IntTestTypes::osterlyCdiProc :
@@ -285,8 +304,15 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
             }
  
         }
+
+        /*
+         * Stopping all bash shell threads
+         */
         /*Wait for waiting time*/
         echo "Waiting $this->waitTime minutes ...\n";
+        sleep ($this->waitTime * 10);
+        $bashShell->disableBashCmdWait();
+        sleep ($this->waitTime * 10);
         /*
          * Set new time limit for execution
          */
@@ -338,10 +364,10 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         /*
          * See if threading is available
          */
-        if( ! Thread::isAvailable() ) {
+        /*if( ! Thread::isAvailable() ) {
             die( 'Threads not supported' );
             echo "\n";
-        }
+        }*/
 
         /*
          * Set slot occupied
@@ -357,16 +383,17 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
         /*
          * Execute bash script logic. check if bash script is specified.
          */
-        $t1 = new Thread('CiRackTestingJobHandlerController::executeTestListInBoxStaticThread');
+        //$t1 = new Thread('CiRackTestingJobHandlerController::executeTestListInBoxStaticThread');
 
         /*
          * start them
          */
-        $t1->start($this, $tbl_box->char_box_ip, $tbl_box->uint_box_index, $tbl_box->char_mac);
+        //$t1->start($this, $tbl_box->char_box_ip, $tbl_box->uint_box_index, $tbl_box->char_mac);
 
         // keep the program running until the threads finish
-        while($t1->isAlive()) {}
- 
+        //while($t1->isAlive()) {}
+        //CiRackTestingJobHandlerController::executeTestListInBoxStaticThread($this, $tbl_box->char_box_ip, $tbl_box->uint_box_index, $tbl_box->char_mac);
+        $this->executeTestListInBox($tbl_box->char_box_ip, $tbl_box->uint_box_index, $tbl_box->char_mac); 
         /*
          * Set Job status in progress
          */

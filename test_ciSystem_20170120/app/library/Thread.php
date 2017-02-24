@@ -53,13 +53,17 @@ class Thread
      */
     private $_pid;
     
+    private $parrentObj=NUll;
     
+    public function &getParrent() {
+        return $this->parrentObj;
+    }
+
     /**
      * Exits with error
      *
      * @return void
-    */
-    
+     */
     private function fatalError($errorCode){
         throw new Exception( $this->getError($errorCode) );
     }
@@ -90,8 +94,9 @@ class Thread
      *
      * @param callback $runnable Callback reference
      */
-    public function __construct( $runnable = null )
+    public function __construct(&$parrent, $runnable = null )
     {
+        $this->parrentObj = &$parrent;
         if(!Thread::isAvailable() )throw new Exception("Threads not supported");
         if ( $runnable !== null ) {
             $this->setRunnable($runnable);
@@ -180,10 +185,11 @@ class Thread
             // child
             pcntl_signal(SIGTERM, array( $this, 'handleSignal' ));
             $arguments = func_get_args();
+            $parrent = &$this->getParrent();
             if ( !empty($arguments) ) {
-                call_user_func_array($this->runnable, $arguments);
+                call_user_func_array($this->runnable, array_merge(array(&$parrent), $arguments));
             } else {
-                call_user_func($this->runnable);
+                call_user_func_array($this->runnable, array(&$parrent));
             }
 
             //exit( 0 ); /*commented since not thread exit*/
