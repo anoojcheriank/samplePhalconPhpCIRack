@@ -440,7 +440,7 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Process individal jobs in job queue
      */
-    private function processMonTasks($tbl_internal_test_details, $jobHandler)
+    private function processMonTasks($tbl_internal_test_details, $testHandler)
     {
 
         $time_out_in_mins = 3* 24 * 60; /*Two days run by default if not specified else*/        
@@ -487,12 +487,12 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             {
                 echo "tbl_monitoring_task_details->uint_monitor_test_wait: $tbl_monitoring_task_details->uint_monitor_test_wait \n";
                 /*Update job wait itme in job handler*/
-                $jobHandler->updateWaitTime($tbl_monitoring_task_details->uint_monitor_test_wait);
+                $testHandler->updateWaitTime($tbl_monitoring_task_details->uint_monitor_test_wait);
             }
             /*
              * Add test cases to Job handler
              */
-            $jobHandler->appendToTestlist($tbl_test);
+            $testHandler->appendToTestlist($tbl_test);
         }
     }
  
@@ -568,15 +568,24 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             }
 
             /*
+             * Store test list details
+             */
+            $testHandler = new CiRackTestingTestHandlerController();
+            
+            /*
              * Add test cases to Job handler
              */
-            $jobHandler->appendToTestlist($tbl_test);
+            $testHandler->appendToTestlist($tbl_test);
 
             /*
              * find monitoring tests link to the Queue and fire it.
              */
-            $this->processMonTasks($tbl_internal_test_details, $jobHandler);
+            $this->processMonTasks($tbl_internal_test_details, $testHandler);
 
+            /*
+             * Add test handler to jobHandler
+             */
+            $jobHandler->appendToTestHandlerlist($testHandler);
         }
 
         /**

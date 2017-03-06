@@ -152,6 +152,21 @@ try {
         }
     );
  
+    /**
+     * processJob webservice
+     */
+    $app->post(
+        "/ciRack/test",
+        function () use ($app){
+            try {
+           
+            }catch (Exception $e) {
+                echo 'Caught exception: '.  $e->getMessage(). "\n";
+            }
+
+        }
+    );
+
     
    /*
     * Start web service
