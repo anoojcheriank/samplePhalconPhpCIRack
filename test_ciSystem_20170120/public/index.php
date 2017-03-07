@@ -99,9 +99,9 @@ try {
         "/ciRack/cancelJob",
         function () use ($app){
             try {
+              $ciRackHandle = new CiRackTestingReqHandlerController();
               $jobId = $app->request->getRawBody();
               echo "jobId: $jobId \n";
-              $ciRackHandle = new CiRackTestingReqHandlerController();
               //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
               $ciRackHandle->cancelJob($jobId);
 
@@ -121,8 +121,8 @@ try {
         function () use ($app){
             try {
 
-              $jsonJob = $app->request->getJsonRawBody();
               $ciRackHandle = new CiRackTestingReqHandlerController();
+              $jsonJob = $app->request->getJsonRawBody();
               //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
               $ciRackHandle->scheduleJob($jsonJob);
 
@@ -140,7 +140,7 @@ try {
         "/ciRack/processJobQueue",
         function () use ($app){
             try {
-
+              
               $ciRackHandle = new CiRackTestingReqHandlerController();
               //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
               $ciRackHandle->processJobQueue();
@@ -159,7 +159,30 @@ try {
         "/ciRack/test",
         function () use ($app){
             try {
-           
+                $lock_file_path= realpath('..') ."/app/logs/file.lock";
+                $lock_file = fopen($lock_file_path,"w+");
+                if (flock($lock_file,LOCK_EX))
+                {             
+                    echo "Enter\n"; 
+                    $now1 = new DateTime();
+                    echo $now1->format('Y-m-d H:i:s'); 
+                    echo "\n";    
+                     // Do the long operation here.
+                    echo "Anooj\n";
+                    sleep (5);
+                    // ...
+                    echo "Exit\n";
+                    $now2 = new DateTime();
+                    echo $now2->format('Y-m-d H:i:s');
+                    echo "\n";
+                    sleep (1);
+                    flock($lock_file,LOCK_UN);
+                }           
+                else
+                {
+                    echo "locked\n";
+                }
+                fclose($lock_file);
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";
             }
