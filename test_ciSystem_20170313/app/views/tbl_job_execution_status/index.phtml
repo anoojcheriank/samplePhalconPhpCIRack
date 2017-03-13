@@ -1,0 +1,84 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="page-header">
+    <h1>
+        Search tbl_job_execution_status
+    </h1>
+    <p>
+        <?php echo $this->tag->linkTo(["tbl_job_execution_status/new", "Create tbl_job_execution_status"]) ?>
+    </p>
+</div>
+
+<?php echo $this->getContent() ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "tbl_job_execution_status/search",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldUnitJobExecutionStatus" class="col-sm-2 control-label">Unit Of Job Of Execution Of Status</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["unit_job_execution_status", "type" => "number", "class" => "form-control", "id" => "fieldUnitJobExecutionStatus"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintJobId" class="col-sm-2 control-label">Uint Of Job</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_job_id", "type" => "number", "class" => "form-control", "id" => "fieldUintJobId"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintSlotIndex" class="col-sm-2 control-label">Uint Of Slot Of Index</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_slot_index", "type" => "number", "class" => "form-control", "id" => "fieldUintSlotIndex"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDatetimeTestStart" class="col-sm-2 control-label">Datetime Of Test Of Start</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["datetime_test_start", "size" => 30, "class" => "form-control", "id" => "fieldDatetimeTestStart"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDatetimeTestFinish" class="col-sm-2 control-label">Datetime Of Test Of Finish</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["datetime_test_finish", "size" => 30, "class" => "form-control", "id" => "fieldDatetimeTestFinish"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintExecutionStatus" class="col-sm-2 control-label">Uint Of Execution Of Status</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_execution_status", "type" => "number", "class" => "form-control", "id" => "fieldUintExecutionStatus"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldTextMsg" class="col-sm-2 control-label">Text Of Msg</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textArea(["text_msg", "cols" => 30, "rows" => 4, "class" => "form-control", "id" => "fieldTextMsg"]) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Search", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>

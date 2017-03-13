@@ -1,0 +1,70 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag->linkTo(["tbl_monitoring_task_seq_of_test", "Back"]) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Edit tbl_monitoring_task_seq_of_test
+    </h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "tbl_monitoring_task_seq_of_test/save",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldUintInternalqMappingIndex" class="col-sm-2 control-label">Uint Of InternalQ Of Mapping Of Index</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_internalQ_mapping_index", "type" => "number", "class" => "form-control", "id" => "fieldUintInternalqMappingIndex"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintMonitorTaskSeqOrder" class="col-sm-2 control-label">Uint Of Monitor Of Task Of Seq Of Order</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_monitor_task_seq_order", "type" => "number", "class" => "form-control", "id" => "fieldUintMonitorTaskSeqOrder"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintMonitorTestIndex" class="col-sm-2 control-label">Uint Of Monitor Of Test Of Index</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_monitor_test_index", "type" => "number", "class" => "form-control", "id" => "fieldUintMonitorTestIndex"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUintMonitorTestWait" class="col-sm-2 control-label">Uint Of Monitor Of Test Of Wait</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["uint_monitor_test_wait", "type" => "number", "class" => "form-control", "id" => "fieldUintMonitorTestWait"]) ?>
+    </div>
+</div>
+
+
+<?php echo $this->tag->hiddenField("id") ?>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Save", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>
