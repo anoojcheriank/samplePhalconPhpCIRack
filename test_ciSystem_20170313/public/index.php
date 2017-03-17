@@ -35,6 +35,12 @@ try {
     include APP_PATH . '/config/loader.php';
 
     /**
+     * Include Locking
+     */
+    include APP_PATH . '/library/ThreadLock.php';
+
+
+    /**
      * Handle the request
      */
     $application = new \Phalcon\Mvc\Application($di);
@@ -65,6 +71,7 @@ try {
             try {
                   //echo $application->handle()->getContent();
 
+                  //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
               
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";
@@ -80,11 +87,8 @@ try {
         "/ciRack/listJobs",
         function () use ($app){
             try {
-
-              $ciRackHandle = new CiRackTestingReqHandlerController();
-              //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
-              $ciRackHandle->listAllJobIds();
-
+                $ciRackHandle = new CiRackTestingReqHandlerController();
+                $ciRackHandle->listAllJobIds();
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";
             }
@@ -99,11 +103,10 @@ try {
         "/ciRack/cancelJob",
         function () use ($app){
             try {
-              $ciRackHandle = new CiRackTestingReqHandlerController();
-              $jobId = $app->request->getRawBody();
-              echo "jobId: $jobId \n";
-              //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
-              $ciRackHandle->cancelJob($jobId);
+                $ciRackHandle = new CiRackTestingReqHandlerController();
+                $jobId = $app->request->getRawBody();
+                echo "jobId: $jobId \n";
+                $ciRackHandle->cancelJob($jobId);
 
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";
@@ -121,10 +124,9 @@ try {
         function () use ($app){
             try {
 
-              $ciRackHandle = new CiRackTestingReqHandlerController();
-              $jsonJob = $app->request->getJsonRawBody();
-              //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
-              $ciRackHandle->scheduleJob($jsonJob);
+                $ciRackHandle = new CiRackTestingReqHandlerController();
+                $jsonJob = $app->request->getJsonRawBody();
+                $ciRackHandle->scheduleJob($jsonJob);
 
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";
@@ -141,10 +143,17 @@ try {
         function () use ($app){
             try {
               
-              $ciRackHandle = new CiRackTestingReqHandlerController();
-              //echo (new \Phalcon\Debug\Dump())->variable($ciRackHandle, "ciRackHandle");
-              $ciRackHandle->processJobQueue();
-
+                $threadlock = new ThreadLock();
+                if ($threadlock->lock())
+                { 
+                    $ciRackHandle = new CiRackTestingReqHandlerController()e
+                    $ciRackHandle->processJobQueue();
+                }
+                else
+                {
+                    echo "locked\n";
+                }
+    
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";
             }
@@ -159,9 +168,9 @@ try {
         "/ciRack/test",
         function () use ($app){
             try {
-                $lock_file_path= realpath('..') ."/app/logs/file.lock";
-                $lock_file = fopen($lock_file_path,"w+");
-                if (flock($lock_file,LOCK_EX))
+                
+                $threadlock = new ThreadLock();
+                if ($threadlock->lock())
                 {             
                     echo "Enter\n"; 
                     $now1 = new DateTime();
@@ -176,13 +185,12 @@ try {
                     echo $now2->format('Y-m-d H:i:s');
                     echo "\n";
                     sleep (1);
-                    flock($lock_file,LOCK_UN);
+                    $threadlock->unlock();
                 }           
                 else
                 {
                     echo "locked\n";
                 }
-                fclose($lock_file);
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";
             }
