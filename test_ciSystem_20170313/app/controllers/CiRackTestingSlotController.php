@@ -54,6 +54,9 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
 
     private $isTestRunning = false;
 
+    private $tbl_slot_alloc = null;
+
+
     public function indexAction()
     {
 
@@ -117,8 +120,20 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
     /*
      * Returns slot details based on the availability.
      */
-    private function getAvailableSlot($build_platform)
+    private function getAllocatedSlot ()
     {
+        return $this->tbl_slot_alloc;
+    }
+
+    /*
+     * Returns slot details based on the availability.
+     *
+     */
+    public function allocateSlot()
+    {
+
+        $ret = false;
+        $build_platform = $this->build_platform;
         /*
          * Check available slots
          */
@@ -128,7 +143,7 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
         if (!is_object($tbl_slots))
         {
             echo "Not able to find free slots \n";
-            return null;
+            return $ret;
         }
 
         foreach ($tbl_slots as $tbl_slot)
@@ -149,10 +164,16 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
             if (is_object($tbl_box_detail))
             {
                 echo "Free slot available with index $tbl_slot->uint_slot_index \n";
-                return $tbl_slot;
+                $this->tbl_slot_alloc = $tbl_slot;
+                $ret = true;
+                /*
+                 * Set slot occupied
+                 */
+                //$slotController->setSlotOccupied($tbl_slot); // disabled for better use
+                break;
             }
         }
-        return null;
+        return $ret;
     }
 
     public function setTestDetails (&$testHandlerList, $build_name, $build_platform)
@@ -356,7 +377,7 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
     /*
      * Execute bash script in the box
      */
-    public static function executeTestListInBoxStaticThread ($jobHandler, $boxip, $uint_box_index, $char_mac)
+    public static function executeTestListInBoxStaticThread (&$jobHandler, $boxip, $uint_box_index, $char_mac)
     {
         if (!is_object($jobHandler) || null==$jobHandler)
         {
@@ -374,6 +395,7 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
      */ 
     public function startTest()
     {
+        $ret = false;
         if (!$this->isTestRunning)
         {
             $this->isTestRunning = true;
@@ -381,18 +403,18 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
              * Check if slot free and execute all the tests 
              * associated in that specific slot
              */
-            $tbl_slot = $this->getAvailableSlot($this->build_platform);
+            $tbl_slot = $this->getAllocatedSlot();
             if (!is_object($tbl_slot) || null==$tbl_slot)
             {
                 echo "Free slots not available \n";
-                return -1;
+                return $ret;
             }
 
             $tbl_box = $this->getBoxInSlot($tbl_slot);
             if (!is_object($tbl_box) || null==$tbl_box)
             {
                 echo "Unable to get box for the slot $tbl_slot->uint_slot_index\n";
-                return -1;
+                return $ret;
             }
             
             /*
@@ -411,12 +433,14 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
             /*
              * Execute bash script logic. check if bash script is specified.
              */
-            $this->testHandlerThread = new Thread('CiRackTestingJobHandlerController::executeTestListInBoxStaticThread');
+            $this->testHandlerThread = new Thread($this, 'CiRackTestingSlotController::executeTestListInBoxStaticThread');
 
             /*
              * start them
              */
-            $this->testHandlerThread->start($this, $tbl_box->char_box_ip, $tbl_box->uint_box_index, $tbl_box->char_mac);
+            $this->testHandlerThread->start($tbl_box->char_box_ip, $tbl_box->uint_box_index, $tbl_box->char_mac);
+            $ret = true;
+            return $ret;
         }
         else
         {
@@ -430,7 +454,11 @@ class CiRackTestingSlotController extends \Phalcon\Mvc\Controller
     public function waitforTestToFinish()
     {
         // keep the program running until the threads finish
+        echo "Thread wait started\n";
         while($this->testHandlerThread->isAlive()) {}
+        echo "Thread wait ended\n";
+        $tbl_slot = $this->getAllocatedSlot();
+        $this->setSlotIsFree($tbl_slot);
         $this->isTestRunning = false;
     }
 

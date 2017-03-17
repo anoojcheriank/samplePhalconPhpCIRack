@@ -1,8 +1,8 @@
-curl -vX POST -d @./simple.json  --header "Content-Type: application/json" http://172.16.4.132:8081/projects/test_ciSystem_20170120/ciRack/scheduleJob
+curl -vX POST -d @./simple.json  --header "Content-Type: application/json" http://172.16.4.132:8081/projects/test_ciSystem_20170313/ciRack/scheduleJob
 
-curl http://172.16.4.132:8081/projects/test_ciSystem_20170120/ciRack/listJobs
-curl -vX POST  http://172.16.4.132:8081/projects/test_ciSystem_20170120/ciRack/cancelJob -d "8"
-curl -vX POST http://172.16.4.132:8081/projects/test_ciSystem_20170120/ciRack/processJobQueue
+curl http://172.16.4.132:8081/projects/test_ciSystem_20170313/ciRack/listJobs
+curl -vX POST  http://172.16.4.132:8081/projects/test_ciSystem_20170313/ciRack/cancelJob -d "8"
+curl -vX POST http://172.16.4.132:8081/projects/test_ciSystem_20170313/ciRack/processJobQueue
 
 
 Git commands

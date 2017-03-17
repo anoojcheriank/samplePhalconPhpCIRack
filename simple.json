@@ -1,8 +1,8 @@
 {
         "__job" : {
-                "job_id" : 7,
+                "job_id" : 2,
                 "priority" : 3,
-                "number_of_boxes" : 4,             
+                "number_of_boxes" : 1,             
                 "build_details" : {
                         "build_name" : "xwing412-NGDEV-69180_ThreadPriority_HQ004-01.08.00-sky_trials",
                         "build_platform" : "xwing",
@@ -11,21 +11,13 @@
                 },
                 "tests_details" : [
                 {
-                       "name" : "bbr-3X25-programs.py",
-                       "type" : "pythonCdiProc",
+                       "name" : "pari_stress_V4_with_debug_NoStandby_20170126_YoutubeSD_VodDeleteSleepAdded",
+                       "type" : "shellCdiProc",
                        "monitoring_tasks" : [
-                                {
-                                    "name" : "blue_screen_check.py",
-                                    "type" : "stormIR"
-                                },
                                 {
                                     "name" : "abort_timeout",
                                     "type" : "timeBased",
-                                    "timeout_in_minutes" : 500
-                                },
-                                {
-                                    "name" : "pink_screen_check.py",
-                                    "type" : "stormIR"
+                                    "timeout_in_minutes" : 2
                                 }
                         ]
                 }

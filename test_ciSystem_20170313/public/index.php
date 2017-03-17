@@ -144,15 +144,24 @@ try {
             try {
               
                 $threadlock = new ThreadLock();
+                $ciRackHandle = new CiRackTestingReqHandlerController();
                 if ($threadlock->lock())
                 { 
-                    $ciRackHandle = new CiRackTestingReqHandlerController()e
+                    /*
+                     * locking mutipple requests to work in same database
+                     * this call schedule the job based on priority
+                     */
                     $ciRackHandle->processJobQueue();
                 }
                 else
                 {
                     echo "locked\n";
                 }
+
+                /*
+                 * Waiting for execution thread to complete 
+                 */
+                $ciRackHandle->waitForJobQueueProcessToComplete();
     
             }catch (Exception $e) {
                 echo 'Caught exception: '.  $e->getMessage(). "\n";

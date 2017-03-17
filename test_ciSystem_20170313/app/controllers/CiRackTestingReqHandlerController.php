@@ -12,9 +12,14 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
      */
     //private $jobHandler; // = new TblJobQueue(); //new CiRackTestingJobHandlerController();
 
+    /*
+     * Create a Jobhandler queue list
+     */
+    private $jobHandlerList = null;
+
     public function onConstruct()
     {
-        //$this->jobHandler = new CiRackTestingJobHandlerController();
+        $this->jobHandlerList = array();
     }
 
     public function indexAction()
@@ -201,7 +206,9 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
         $tbl_job_queue = new TblJobQueue();
         $tbl_job_queue->uint_job_id = $jsonJob->job_id;
         $tbl_job_queue->uint_priority = $jsonJob->priority;
-        $tbl_job_queue->uint_number_of_boxes = $jsonJob->number_of_boxes;
+        $tbl_job_queue->uint_num_boxes_sched = $jsonJob->number_of_boxes;
+        $tbl_job_queue->uint_num_boxes_inprog = 0;
+        $tbl_job_queue->uint_num_boxes_finished = 0;
         $tbl_job_queue->uint_job_status = JobState::Scheduled; /*Need to add with enum*/
 
         $build_details=$jsonJob->build_details;
@@ -499,10 +506,9 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
     /*
      * Process individal jobs in job queue
      */
-    private function processJob($tbl_job)
+    private function processJob($tbl_job, &$jobHandlerArg)
     {
-        /*Create a job handler to execute the task*/
-        $jobHandler = new CiRackTestingJobHandlerController();
+        $jobHandler = &$jobHandlerArg;
         $jobHandler->UpdateTblJobDetails($tbl_job);
         /*
          * Add the build name and build type to Job Handler
@@ -620,14 +626,32 @@ class CiRackTestingReqHandlerController extends \Phalcon\Mvc\Controller
             echo "Scheduled job queue is empty \n";
             return -1;
         }
- 
+
+
         foreach ($tbl_job_queue as $tbl_job) 
         {
             echo "job_id: $tbl_job->uint_job_id \n";
             echo "priority: $tbl_job->uint_priority \n";
-            echo "number_of_boxes: $tbl_job->uint_number_of_boxes \n";
-            $this->processJob($tbl_job);
+            echo "number_of_boxes: $tbl_job->uint_num_boxes_sched \n";
+           
+            /*Create a job handler to execute the task*/
+            $jobHandler = new CiRackTestingJobHandlerController();
+            $this->processJob($tbl_job, $jobHandler);
+            //array push is pointer is pushed.
+            array_push($this->jobHandlerList, $jobHandler);
             //$tbl_job_queue->uint_job_status = "SCHEDULED"; /*Need to add with enum*/
+        }
+
+    }
+
+    public function waitForJobQueueProcessToComplete ()
+    {
+        /*
+         * Wait for Job to Complete
+         */
+        foreach($this->jobHandlerList as $jobHandler)
+        {
+            $jobHandler->waitforTestToFinish();
         }
 
     }

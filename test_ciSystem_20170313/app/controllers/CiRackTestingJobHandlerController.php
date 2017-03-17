@@ -119,37 +119,64 @@ class CiRackTestingJobHandlerController extends \Phalcon\Mvc\Controller
      */ 
     public function executeTest()
     {
+
+        $uint_num_boxes_sched = $this->tblJob->uint_num_boxes_sched;
+        $uint_num_boxes_inprog = $this->tblJob->uint_num_boxes_inprog;
+        $index = 0;
+        for ($index=0; $index < $uint_num_boxes_sched; $index++)
+        {
+            /*
+             * Check if slot free and execute all the tests 
+             * associated in that specific slot
+             */
+            $slotController = new CiRackTestingSlotController();
+
+            $slotController->setTestDetails ($this->testHandlerList, $this->build_name, $this->build_platform);
+            $ret = $slotController->allocateSlot();
+            if (false == $ret)
+            {
+                break;
+            }
+            $ret = $slotController->startTest();
+            $this->addSlot($slotController);
+
+            /*
+             * Set slot if free
+             */
+            //$slotController->setSlotIsFree($tbl_slot);
+        }
+        $uint_num_boxes_sched = $uint_num_boxes_sched - $index;
+        $uint_num_boxes_inprog = $uint_num_boxes_inprog + $index;
+
         /*
-         * Check if slot free and execute all the tests 
-         * associated in that specific slot
+         * Set Job status in progress and update the box status.
          */
-        $slotController = new CiRackTestingSlotController();
-
-        $slotController->setTestDetails ($this->testHandlerList, $this->build_name, $this->build_platform);
-        $this->addSlot($slotController);
-
-        $slotController->startTest();
-
-        /*
-         * Set Job status in progress
-         */
+        $this->tblJob->uint_num_boxes_sched = $uint_num_boxes_sched;
+        $this->tblJob->uint_num_boxes_inprog = $uint_num_boxes_inprog;
         $this->tblJob->uint_job_status = JobState::InProgress;
         GenModelUtilityController::saveModelFn($this->tblJob);
 
         //Need to decide when Job status completed and slot will be available again
 
-       /*
-         * Set Job status completed 
+        /*
+         * Set Job status completed should be updated where job finished status is available.
          */
         //$this->tblJob->uint_job_status = JobState::Completed;
         //GenModelUtilityController::saveModelFn($this->tblJob);
 
-        /*
-         * Set slot if free
-         */
-        //$slotController->setSlotIsFree($tbl_slot);
 
     }
+
+    /*
+     * Async wait for thread task to complete
+     */
+    public function waitforTestToFinish()
+    {
+        foreach($this->slotArray as $slotHandler)
+        {
+            $slotHandler->waitforTestToFinish();
+        }
+    } 
 
     /*
      * Update the build details
